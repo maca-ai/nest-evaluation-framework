@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://maca-ai.github.io/nef/schemas/1.0.0/target-descriptor.schema.json",
+  "title": "TargetDescriptor",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository_url",
+    "requested_ref",
+    "resolved_sha",
+    "observed_at",
+    "source_kind"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "repository_url": { "type": "string", "format": "uri", "minLength": 1, "pattern": "^(?![^:]+://[^/@]+@).+$" },
+    "requested_ref": { "type": "string", "minLength": 1 },
+    "resolved_sha": { "$ref": "#/$defs/sha1" },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "source_kind": { "enum": ["local", "remote"] }
+  },
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+  }
+}

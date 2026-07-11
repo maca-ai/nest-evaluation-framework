@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://maca-ai.github.io/nef/schemas/1.0.0/campaign-result.schema.json",
+  "title": "CampaignResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "campaign_id",
+    "state",
+    "required",
+    "started_at",
+    "finished_at",
+    "cases",
+    "measurements",
+    "candidate_finding_fingerprints",
+    "replay_metadata",
+    "budget_use",
+    "evidence_manifest_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "campaign_id": { "$ref": "#/$defs/stableId" },
+    "state": { "$ref": "#/$defs/state" },
+    "required": { "type": "boolean" },
+    "started_at": { "type": "string", "format": "date-time" },
+    "finished_at": { "type": "string", "format": "date-time" },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_id", "state", "reason", "evidence_digests"],
+        "properties": {
+          "case_id": { "$ref": "#/$defs/stableId" },
+          "state": { "$ref": "#/$defs/state" },
+          "reason": { "type": ["string", "null"] },
+          "evidence_digests": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/sha256" }
+          }
+        }
+      }
+    },
+    "measurements": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          { "type": "integer" },
+          { "$ref": "#/$defs/decimal" },
+          { "type": "string" },
+          { "type": "boolean" }
+        ]
+      }
+    },
+    "candidate_finding_fingerprints": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/sha256" }
+    },
+    "replay_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replayable", "data"],
+      "properties": {
+        "replayable": { "type": "boolean" },
+        "data": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/canonicalValue" }
+        }
+      }
+    },
+    "budget_use": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["elapsed_seconds", "cost_eur", "peak_memory_mib", "output_bytes"],
+      "properties": {
+        "elapsed_seconds": { "$ref": "#/$defs/decimal" },
+        "cost_eur": { "$ref": "#/$defs/decimal" },
+        "peak_memory_mib": { "type": "integer", "minimum": 0 },
+        "output_bytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "evidence_manifest_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+  },
+  "$defs": {
+    "state": { "enum": ["pass", "fail", "error", "inconclusive", "invalid", "skipped"] },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "decimal": { "type": "string", "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$" },
+    "stableId": { "type": "string", "pattern": "^[a-z0-9]+(?:[/-][a-z0-9]+)*$" },
+    "canonicalValue": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "integer" },
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/canonicalValue" }
+        },
+        {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/canonicalValue" }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "pass" } }, "required": ["state"] },
+      "then": {
+        "properties": {
+          "evidence_manifest_digest": { "$ref": "#/$defs/sha256" },
+          "cases": {
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": { "const": "pass" },
+                "evidence_digests": { "minItems": 1 }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "skipped" } }, "required": ["state"] },
+      "then": {
+        "properties": {
+          "cases": {
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["reason"],
+              "properties": {
+                "state": { "const": "skipped" },
+                "reason": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
