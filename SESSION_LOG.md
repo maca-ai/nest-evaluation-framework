@@ -317,3 +317,15 @@ Consulted target paths, in orientation order: `AGENTS.md`; `PRD.md`; `PLANNING.m
 - Read-only `git ls-remote origin` returned no refs. The task branch can be pushed, but a draft PR targeting `main` cannot exist if the remote still has no base branch.
 
 **Exact next action:** create the Conventional Commit checkpoint, push `docs/NEF-T001-specifications`, verify remote SHA equality, then attempt a draft PR to `main`. If GitHub refuses because `main` does not exist, stop and ask Matthias to establish/authorize the base branch; do not push directly to `main` or invent another base.
+
+### Remote checkpoint outcome
+
+- Local checkpoint commit: `aebd2b151dfb1252dd4c952d74dc8256b1975c5d` (`docs(specs): NEF-T001 define executable contracts`).
+- Push: PASS; `docs/NEF-T001-specifications` created on `origin` and configured as the upstream branch.
+- Remote SHA verification: PASS; `refs/heads/docs/NEF-T001-specifications` exactly matched `aebd2b151dfb1252dd4c952d74dc8256b1975c5d`.
+- Draft PR command: `gh pr create --repo maca-ai/nest-evaluation-framework --base main --head docs/NEF-T001-specifications --draft --title "NEF-T001: define constitution and executable specifications" ...`.
+- Draft PR result: FAIL. Exact GitHub error: `pull request create failed: GraphQL: Head sha can't be blank, Base sha can't be blank, No commits between main and docs/NEF-T001-specifications, Base ref must be a branch (createPullRequest)`.
+- Cause: the approved GitHub repository was empty before this checkpoint and has no `main` ref/default branch. The pushed task branch is the only remote ref.
+- CI/review: not started because no pull request exists; NEF-T002 has not yet created the CI scaffold.
+- Task status: NEF-T001 remains In progress despite complete local acceptance because Matthias requires a draft PR at the task checkpoint.
+- Smallest next action: Matthias creates or explicitly authorizes creation of a legitimate `main` base branch, then directs how the already-pushed root task commit should be related to that base without force-push, history rewrite, or a direct task commit to `main`. After that external decision, update/open the draft PR and wait for CI/review. Do not start NEF-T002 meanwhile.
