@@ -22,9 +22,26 @@ Time-sensitive claims are refreshed from primary sources at decision time. Each 
 
 ## Deferred refresh points
 
-- NEF-T002: Python, uv, Pydantic, quality tools, `cryptography`, action SHAs, and Anthropic review-model snapshot.
 - NEF-T006: mutation-tool maintenance, supported Python versions, and licensing.
 - NEF-T007: exact Hypothesis version and replay behavior.
 - NEF-T009: OpenAI model snapshot, API request schema, SDK version, pricing, usage accounting, and data controls.
 
 No pricing, model snapshot, mutation-tool selection, or repository retention setting is frozen by NEF-T001.
+
+## 2026-07-12 - NEF-T002
+
+| Source | Retrieved | Supported claim | Disposition |
+|---|---|---|---|
+| https://www.python.org/downloads/release/python-31213/ | 2026-07-12 | Python 3.12.13 is the current 3.12 security release; 3.12 is security-fixes-only. | Pin Python 3.12.13 for the v1 scaffold and treat interpreter changes as lock/protocol events. |
+| https://pypi.org/pypi/pydantic/json; https://pypi.org/pypi/PyYAML/json; https://pypi.org/pypi/httpx/json; https://pypi.org/pypi/opentelemetry-api/json; https://pypi.org/pypi/opentelemetry-sdk/json; https://pypi.org/pypi/cryptography/json | 2026-07-12 | Official registry metadata reported Pydantic 2.13.4, PyYAML 6.0.3, httpx 0.28.1, OpenTelemetry API/SDK 1.43.0, and cryptography 49.0.0 as current stable releases. | Pin exact direct runtime versions and commit the uv lock. |
+| https://pypi.org/pypi/pytest/json; https://pypi.org/pypi/pytest-asyncio/json; https://pypi.org/pypi/hypothesis/json; https://pypi.org/pypi/ruff/json; https://pypi.org/pypi/mypy/json; https://pypi.org/pypi/import-linter/json; https://pypi.org/pypi/bandit/json; https://pypi.org/pypi/pip-audit/json | 2026-07-12 | Official registry metadata reported pytest 9.1.1, pytest-asyncio 1.4.0, Hypothesis 6.156.6, ruff 0.15.21, mypy 2.2.0, import-linter 2.13, bandit 1.9.4, and pip-audit 2.10.1. | Pin exact development versions and execute them from the shared uv lock. |
+| https://pypi.org/project/jsonschema/4.26.0/ | 2026-07-12 | jsonschema 4.26.0 supports Python >=3.10 and implements JSON Schema validation including Draft 2020-12. | Approved development-only dependency for semantic validation of the amended normative schemas. |
+| https://docs.astral.sh/uv/concepts/projects/sync/; https://docs.astral.sh/uv/reference/cli/ | 2026-07-12 | `uv lock --check`, `uv sync --locked`, and `uv run --locked` refuse lock drift rather than silently updating it. | Use locked/checking modes locally and in CI. |
+| https://github.com/astral-sh/setup-uv/releases/tag/v8.3.2; https://github.com/actions/checkout/releases/tag/v7.0.0 | 2026-07-12 | Official releases resolve to setup-uv commit `11f9893b081a58869d3b5fccaea48c9e9e46f990` and checkout commit `9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0`. | Pin full action SHAs with release comments. |
+| https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1 | 2026-07-12 | Official release v8.30.1 publishes a Linux x64 archive and checksum manifest; archive SHA-256 is `551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb`. | Download the pinned binary in CI, verify checksum before execution, and avoid the licensed action/secret. |
+| https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions; https://platform.claude.com/docs/en/about-claude/models/overview; https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking | 2026-07-12 | `claude-fable-5` is a fixed canonical model ID, generally available, with always-on adaptive thinking; non-default sampling parameters are rejected. | Pin `claude-fable-5`, omit sampling parameters, bound output, and keep review advisory. |
+| https://platform.claude.com/docs/en/build-with-claude/structured-outputs; https://platform.claude.com/docs/en/api/messages/create | 2026-07-12 | Messages requests require `max_tokens`; `output_config.format` accepts JSON Schema, while refusals/truncation can still produce non-schema output. | Request a closed JSON shape and independently reject non-`end_turn`, malformed, or non-candidate output. |
+| https://docs.github.com/en/actions/reference/security/secure-use | 2026-07-12 | Privileged workflows must not check out untrusted PR code; `workflow_run` can separate unprivileged CI from trusted secret-bearing review. | Reviewer runs from trusted default-branch code after CI and consumes the bounded PR diff only as data. |
+| https://github.com/maca-ai/nest.git | 2026-07-12 | Read-only tag enumeration returned only annotated `m0`: ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled commit `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; `m1` was absent. | Default gate target is m0. Post-m0 work requires explicit provisional SHA mode; no moving-main selection or fallback. |
+
+Target-tag observations are point-in-time evidence and are rechecked at pin time. No claim that GitHub prevents tag movement is made; NEF compares bindings against retained validated snapshots.

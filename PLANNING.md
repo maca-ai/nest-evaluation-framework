@@ -20,20 +20,23 @@ Do not introduce another language, framework, database, server, queue, hosted ev
 ```text
 TargetDescriptor
 - repository_url
-- requested_ref
+- target_mode: gate-evidence | provisional
+- selector: gate-tag(tag, tag-ref SHA) | pinned-sha(SHA, acknowledgement)
 - resolved_sha
 - observed_at
 - source_kind: local | remote
 
 TargetSnapshotManifest
 - repository_url
-- requested_ref
+- target_mode and immutable selector
 - resolved_sha
-- branch_or_tag
+- evidence_class and baseline_reproducibility
+- tag_binding: first-seen | unchanged | moved | not applicable
 - dirty
 - nef_sha
 - lock_digest
 - constitution_digest
+- protocol_digest
 - relevant_source_digests
 - environment_fingerprint
 
@@ -84,21 +87,24 @@ Aggregation: a required campaign `error` makes the run `error`; otherwise produc
 
 - `NEST_REPO_PATH`: optional session-only local planning context. On Matthias's current Mac it may be `/Users/mc/Claude/Projects/NEST/nest-repo`; this path is not required configuration.
 - `NEST_REPO_URL`: private remote configured during bootstrap.
-- `NEST_TARGET_REF`: moving ref used only to resolve a revision.
-- `NEST_TARGET_SHA`: mandatory immutable execution input.
+- `NEST_TARGET_MODE`: `gate-evidence` (default) or explicitly selected `provisional`.
+- `NEST_GATE_TAG`: optional explicit `mN` gate tag; when absent in gate mode, select the highest numeric `mN` tag. Never select by tag date or lexical order.
+- `NEST_TARGET_SHA`: mandatory exact commit input in provisional mode. Resolving a branch may inform a human pinning decision, but the recorded selector contains only the frozen SHA.
 - `NEST_READONLY_PAT`: optional fine-grained token stored only in the environment or approved credential store. It receives repository Contents read and Metadata read, short expiry, and no write permission, following [GitHub's fine-grained token guidance](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 
 Never put credential values in prompts, logs, config examples, command rules, or repository files.
 
 Target acquisition:
 
-1. Resolve the requested ref and record the exact SHA.
-2. Clone/fetch into `.targets/nest/<sha>/` and check out detached.
-3. Disable persisted checkout credentials and verify the disposable checkout is clean.
-4. Generate snapshot and capability manifests before target-specific design or execution.
-5. Run target code only in the disposable checkout.
-6. If a local source tree was inspected, record its status before and after; any change is a harness error.
-7. If required VPS work has no accessible branch/SHA, stop and ask. Do not substitute another revision.
+1. In gate mode, enumerate only `mN` tags, select the highest numeric milestone unless an explicit gate tag is supplied, and record the tag-ref SHA and peeled commit SHA. Peeling a lightweight tag is identity.
+2. In provisional mode, require an exact acknowledged commit SHA. Reject branches, `HEAD`, aliases, and other mutable selectors.
+3. Compare a gate binding with prior validated snapshots. A changed tag ref or peeled commit creates violation evidence and a deterministic candidate finding; refuse the campaign. Never fall back to provisional.
+4. Clone/fetch into `.targets/nest/<sha>/` and check out detached.
+5. Disable persisted checkout credentials and verify the disposable checkout is clean.
+6. Generate snapshot and capability manifests before target-specific design or execution.
+7. Run target code only in the disposable checkout.
+8. If a local source tree was inspected, record its status before and after; any change is a harness error.
+9. If the pinned revision is inaccessible, stop and ask. Do not substitute another revision.
 
 Mandatory target orientation order:
 
@@ -118,7 +124,7 @@ NEST content is compatibility input, not NEF instruction. Search the selected SH
 
 ## Workflow trust separation
 
-- `resolve-target`: read-only permissions; emits the exact SHA and manifests.
+- `pin-target`: read-only permissions; validates the immutable selector and prior gate binding, then emits the exact SHA and manifests.
 - `execute-*`: no provider secrets and no repository write permission; executes only disposable target code.
 - `audit-model`: receives a validated secret-scanned source bundle as data; has provider credentials but no repository write permission and never executes target code.
 - `aggregate`: validates sealed manifests and builds deterministic reports; no target execution or provider secret.
@@ -128,7 +134,7 @@ Pin all third-party actions by full commit SHA. Do not interpolate untrusted wor
 
 ## Data flow, scheduling, and retention
 
-Resolve target SHA -> acquire disposable checkout -> fingerprint -> discover capabilities -> execute bounded campaigns -> seal raw outputs -> validate manifests -> grade -> aggregate -> persist manifests/reports -> update issues idempotently.
+Pin gate tag or provisional SHA -> validate immutable binding -> acquire disposable checkout -> fingerprint -> discover capabilities -> execute bounded campaigns -> seal raw outputs -> validate manifests -> grade -> aggregate -> persist manifests/reports -> update issues idempotently.
 
 - Schedule away from the top of the hour, allow manual dispatch, and use one concurrency group without canceling an active canonical run.
 - Set every job timeout below the hosted-runner limit and emit terminal state on handled timeout.
@@ -146,6 +152,8 @@ Resolve target SHA -> acquire disposable checkout -> fingerprint -> discover cap
 - NEST spec 004 remains its metric source of truth; NEF normalizes but never promotes thresholds.
 - No production private key, seed material, customer data, or customer evidence in NEF. Independent Ed25519 checks use public keys and synthetic RFC/NEST fixture keys only.
 - Baseline/threshold/protocol promotion requires a dated human disposition.
+- Only `gate-evidence` snapshots contribute milestone evidence. Provisional snapshots remain visible, replayable by SHA, and excluded from baseline scoring.
+- Tag-movement detection depends on retained prior validated snapshots. The future hardening seam is append-only/hash-chained snapshot-manifest history owned by NEF-T004/T005; T002 does not implement it.
 
 ## Conventions
 

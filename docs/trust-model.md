@@ -24,8 +24,8 @@ NEF distinguishes these classes; it does not reinterpret every anomaly as a prod
 ## Trust boundaries
 
 ```text
-moving ref
-  -> resolve-target (read-only)
+gate tag or acknowledged commit SHA
+  -> pin-target (read-only; prior-binding comparison)
   -> exact SHA + TargetSnapshotManifest + TargetCapabilityManifest
   -> execute-* (disposable target, no provider secret, no repo write)
   -> sealed evidence
@@ -44,8 +44,11 @@ validated secret-scanned source bundle
 
 ### Target acquisition
 
-- Treat repository locators, refs, source, tests, documentation, issues, logs, and fixtures as untrusted data.
-- Resolve a ref to a SHA before target-specific design or execution.
+- Treat repository locators, tags, source, tests, documentation, issues, logs, and fixtures as untrusted data.
+- Default to the highest numeric `mN` gate tag and record tag-ref plus peeled commit SHA; peeling a lightweight tag is identity.
+- Permit provisional work only from an explicitly acknowledged commit SHA and label it non-gate evidence/non-reproducible baseline.
+- Reject branches, `HEAD`, aliases, and other mutable recorded selectors. Never fall back silently from gate selection to provisional.
+- Compare gate bindings with prior validated snapshots. Retain/refuse a moved binding and emit a deterministic candidate finding.
 - Use `.targets/nest/<sha>/` as a detached disposable checkout.
 - Verify the checkout is clean and contains no persisted credential material.
 - Never execute in Matthias's original local NEST working tree.
@@ -95,3 +98,4 @@ validated secret-scanned source bundle
 - The GitHub watchdog shares the scheduler's failure domain.
 - Provider budgets are alerts, not hard caps.
 - Model graders can be wrong; transcript and deterministic evidence remain available for human review.
+- Moved-tag detection is only as strong as retained prior-snapshot binding history. Deleting a prior snapshot can downgrade a moved tag to `first-seen` and evade detection. The named future hardening seam is append-only/hash-chained snapshot-manifest history owned by NEF-T004/T005; NEF-T002 records this residual but does not build that history.

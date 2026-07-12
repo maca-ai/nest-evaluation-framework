@@ -2,7 +2,7 @@
 
 **Spec:** NEF-001
 **Status:** Approved for NEF-T001 implementation
-**Schema version:** 1.0.0
+**Schema versions:** TargetDescriptor, TargetSnapshotManifest, and CampaignRequest 2.0.0; unaffected contracts 1.0.0 (amended 2026-07-12)
 **Depends on:** NEF constitution
 
 ## Goal
@@ -68,7 +68,7 @@ As a triager, I receive stable candidate findings linked to evidence and record 
 
 ## Functional requirements
 
-- **NEF-001-FR-001:** Contracts MUST conform to the normative JSON Schemas under `contracts/` and use semantic version 1.0.0 initially.
+- **NEF-001-FR-001:** Contracts MUST conform to the normative JSON Schemas under `contracts/` and use their object-specific semantic versions. TargetDescriptor, TargetSnapshotManifest, and CampaignRequest are 2.0.0 after the immutable-target amendment; unaffected contracts remain 1.0.0.
 - **NEF-001-FR-002:** The only public campaign execution seam MUST be `Campaign.execute(CampaignRequest) -> CampaignResult`.
 - **NEF-001-FR-003:** Contracts MUST be immutable after validation and reject unknown fields.
 - **NEF-001-FR-004:** Case and campaign states MUST be exactly `pass`, `fail`, `error`, `inconclusive`, `invalid`, and `skipped`.
@@ -107,6 +107,7 @@ Field-level definitions and evolution rules are in `docs/public-interfaces.md` a
 - Empty required campaign set is invalid, not a pass.
 - A campaign process exits successfully but emits no result: `error`.
 - A result references evidence that validates under a different target SHA or protocol digest: `invalid`.
+- A CampaignRequest embeds a snapshot whose gate binding is `moved`: invalid and refused before campaign execution; the snapshot remains violation evidence.
 - Two attempts claim the same canonical attempt number: publication error; neither silently overwrites the other.
 - A non-required unavailable capability is reasoned `skipped`; a required campaign unexpectedly missing from the result set makes the run `inconclusive` or `error` according to whether evidence explains the absence.
 - Model/provider outage cannot convert deterministic findings to error; it affects only the model campaign.

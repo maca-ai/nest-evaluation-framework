@@ -1,6 +1,6 @@
 # Public interfaces and schemas
 
-Contract version: `1.0.0`. Normative JSON Schemas live under `specs/001-framework-contracts/contracts/`.
+Contract versions are per object. `TargetDescriptor`, `TargetSnapshotManifest`, and `CampaignRequest` are `2.0.0`; unaffected contracts remain `1.0.0`. Normative JSON Schemas live under `specs/001-framework-contracts/contracts/`.
 
 ## Deep execution seam
 
@@ -14,7 +14,7 @@ Implementations may be synchronous or asynchronous internally, but callers and c
 
 - Immutable after validation.
 - Unknown fields refused.
-- `schema_version` is semantic version `1.0.0` initially.
+- `schema_version` is semantic and object-specific; breaking target-pinning changes use 2.0.0.
 - Timestamps are timezone-aware UTC strings.
 - SHA-256 values are lowercase 64-character hexadecimal strings.
 - Decimal values are strings, never JSON numbers.
@@ -24,27 +24,32 @@ Implementations may be synchronous or asynchronous internally, but callers and c
 
 ## TargetDescriptor
 
-Describes resolution input and its observed exact result:
+Describes one immutable pin decision and its observed exact result:
 
 - `repository_url`
-- `requested_ref`
+- `target_mode`: `gate-evidence` or `provisional`
+- `selector`: closed gate-tag or pinned-SHA variant
 - `resolved_sha`
 - `observed_at`
 - `source_kind`: `local` or `remote`
 
-`requested_ref` never substitutes for `resolved_sha` in a run identity.
+Gate selectors record `gate_tag` plus `tag_ref_sha`. Provisional selectors record `pinned_sha` plus explicit acknowledgement. Branches, `HEAD`, aliases, and other mutable refs cannot validate. `resolved_sha == peel(tag_ref_sha)` is a semantic invariant; peeling a lightweight tag is identity. A provisional `pinned_sha` must equal `resolved_sha`.
 
 ## TargetSnapshotManifest
 
 Proves which target and environment were inspected:
 
-- repository/ref/SHA and branch/tag
+- repository, target mode, immutable selector, and resolved SHA
+- evidence class and baseline reproducibility
+- tag-binding state and prior binding evidence, or null for provisional mode
 - dirty state
 - NEF SHA or explicit unavailable bootstrap reason
-- target lock and constitution digests
+- target lock, constitution, and protocol digests
 - relevant source digests
 - environment fingerprint
 - consulted paths and observation time
+
+Only `gate-evidence` plus `reproducible-baseline` may count toward milestone scoring. Provisional snapshots are `non-gate-evidence` and `non-reproducible-baseline`. A `moved` snapshot is valid violation evidence but cannot be embedded in an executable CampaignRequest.
 
 ## TargetCapabilityManifest
 
@@ -70,6 +75,7 @@ Contains:
 - randomness and replay inputs
 
 The workspace must resolve beneath the NEF-owned disposable target root.
+CampaignRequest 2.0.0 embeds TargetSnapshotManifest 2.0.0 and rejects `tag_binding.state=moved`.
 
 ## CampaignResult
 
@@ -107,4 +113,4 @@ It records actor, rationale, time, finding fingerprint, and evidence/run referen
 
 ## Schema evolution
 
-T003 generates Pydantic JSON Schemas that must conform semantically to these normative schemas. Ordering of `$defs` or descriptions is not semantic; field names, types, requiredness, enums, formats, and closed-object behavior are. A breaking change requires Matthias, a schema-version change, cross-artifact analysis, and a new protocol digest when behavior changes.
+T003 generates Pydantic JSON Schemas that must conform semantically to these normative schemas. Ordering of `$defs` or descriptions is not semantic; field names, types, requiredness, enums, formats, and closed-object behavior are. A breaking change requires Matthias, a schema-version change, cross-artifact analysis, and a new NEF protocol digest when behavior changes. Per-object versions may differ; consumers must honor the embedded object's version.

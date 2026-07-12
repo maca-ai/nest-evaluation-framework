@@ -1,0 +1,1 @@
+"""Internal campaign adapters."""
