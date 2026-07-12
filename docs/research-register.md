@@ -58,3 +58,16 @@ Target-tag observations are point-in-time evidence and are rechecked at pin time
 | https://github.com/maca-ai/nest.git | 2026-07-12 | Live read-only tag enumeration returned only annotated `m0`: tag ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled commit `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; no `m1` ref exists. | Pin T003 orientation to unchanged m0 gate evidence. Do not select newer work or provisional mode. |
 
 No T003 decision requires a new dependency, schema version, protocol, target baseline, provider, or service.
+
+## 2026-07-12 - NEF-T004
+
+| Source | Retrieved | Supported claim | Disposition |
+|---|---|---|---|
+| https://docs.python.org/3.12/library/functions.html#open | 2026-07-12 | Python 3.12.13 binary `x` mode performs exclusive creation and raises `FileExistsError` when the destination already exists. | Never open a final content-addressed path with truncating write mode; treat an existing different object as a conflict. |
+| https://docs.python.org/3.12/library/tempfile.html#tempfile.mkstemp | 2026-07-12 | `mkstemp()` creates a user-only temporary file without a creation race when the platform implements `O_EXCL`; callers own cleanup. | Stage canonical bytes securely in the destination directory, flush/fsync them, atomically link the completed file into its final write-once name, and always remove the temporary name. |
+| https://docs.python.org/3.12/library/os.html#os.fsync; https://docs.python.org/3.12/library/os.html#os.link | 2026-07-12 | `fsync()` flushes a file descriptor to disk; `os.link()` creates a hard link at a distinct destination name. | Publish only fully flushed bytes and use same-directory hard-link creation so the final path is never partially visible or overwritten. Fail explicitly if the filesystem cannot provide the primitive. |
+| https://docs.github.com/en/organizations/managing-organization-settings/configuring-the-retention-period-for-github-actions-artifacts-and-logs-in-your-organization | 2026-07-12 | Private repositories can configure Actions artifact/log retention from 1 to 400 days; managing organization/enterprise policy may impose a lower maximum, and changes are not retroactive. | Persist a requested-400/effective-maximum metadata record and refuse sealing when the observed maximum is missing or below 400. T004 does not query or mutate GitHub settings; T005 supplies the observation. |
+| https://docs.github.com/en/actions/how-tos/manage-workflow-runs/remove-workflow-artifacts | 2026-07-12 | Workflow artifacts can be deleted before expiration and deletion is irreversible. | Never claim 400-day metadata or an evidence branch provides permanence; retain the hostile-host/deletion limitation. |
+| https://github.com/maca-ai/nest.git | 2026-07-12 | Live read-only tag enumeration at 2026-07-12T14:29:11Z returned only annotated `m0`: tag ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled commit `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; no `m1` ref exists. | Keep T004 oriented to unchanged m0 gate evidence; no provisional fallback or newer target assumption. |
+
+No T004 decision requires a new dependency, normative schema, protocol shape, provider, service, GitHub setting mutation, or target execution.

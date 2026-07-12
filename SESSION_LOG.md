@@ -834,3 +834,103 @@ The prior first-seen snapshot was re-parsed from its append-only journal YAML, v
 **Review-fix remote checkpoint:** Commit `226910444fb196865f2618754216c5e12cb28715` pushed additively to `origin/feat/NEF-T003-contracts-and-campaign-seam`; read-only remote verification returned the identical SHA. Draft PR #2 remains OPEN/DRAFT at `https://github.com/maca-ai/nest-evaluation-framework/pull/2` with the updated fix, 84-test result, sabotage proof, protocol digest, and narrowed prior-history claim. GitHub CI `verify`, including pinned gitleaks, passed at `https://github.com/maca-ai/nest-evaluation-framework/actions/runs/29195791692/job/86658397407`. GitHub still reports no native reviews or review threads; no merge occurred.
 
 **Final record boundary:** Commit and push this append-only remote evidence on the same branch, verify final local/remote SHA equality and green CI at the record tip, then stop for cross-vendor re-review/Matthias disposition. Keep PR #2 draft; do not mark T003 Done or begin T004.
+
+## 2026-07-12 - NEF-T004 orientation and decision-complete plan
+
+**Project / task / mode / Git state:** NEF, NEF-T004 Evidence store and offline verifier, active goal mode. Matthias reports final cross-vendor GO for PR #2; GitHub independently reports it MERGED with merge commit `544c6b498174d7a02603d7589d50247ba5b9ab41`, preserving review-fix and record commits. Local `main` was cleanly fast-forwarded to that exact `origin/main`, then branch `feat/NEF-T004-evidence-store-and-verifier` was created from it. T003 is Done; T004 is the sole In-progress and top eligible task. No direct-main push, rebase, or history rewrite occurred.
+
+**Live immutable target pin:** At `2026-07-12T14:29:11Z`, read-only `git ls-remote --tags https://github.com/maca-ai/nest.git` returned only annotated `m0`; no `m1` exists. Tag ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a` still peels to `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`. The disposable checkout at `.targets/nest/cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12` is detached and clean at tree `77ccd2fc1a41dd365a3b3b98508bb0534b56c95f`; its origin is credential-free and no checkout-local HTTP extraheader or credential helper exists. No target test/campaign ran and no target file was written. `NEST_REPO_PATH` is not configured, so no optional original checkout was inspected.
+
+### TargetDescriptor 2.0.0 - NEF-T004
+
+```yaml
+schema_version: 2.0.0
+repository_url: https://github.com/maca-ai/nest.git
+target_mode: gate-evidence
+selector:
+  kind: gate-tag
+  gate_tag: m0
+  tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+observed_at: 2026-07-12T14:29:11Z
+source_kind: remote
+```
+
+### TargetSnapshotManifest 2.0.0 - NEF-T004
+
+```yaml
+schema_version: 2.0.0
+repository_url: https://github.com/maca-ai/nest.git
+target_mode: gate-evidence
+selector:
+  kind: gate-tag
+  gate_tag: m0
+  tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+evidence_class: gate-evidence
+baseline_reproducibility: reproducible-baseline
+tag_binding:
+  state: unchanged
+  previous_snapshot_manifest_digest: c012622a3bfe9f3136ca9a4c3381c1b3f75031938e3d2f16c962e89e8856bf68
+  previous_tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+  previous_resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+dirty: false
+nef_sha: 544c6b498174d7a02603d7589d50247ba5b9ab41
+lock_digest: 9f5e25f611865b3e37951b5975c27af4ed1229a1610f7bff00418aa56059e853
+constitution_version: 1.3.0
+constitution_digest: 6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a
+protocol_digest: e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714
+relevant_source_digests:
+  docs/DECISIONS-2026-07-06-REDTEAM.md: 55e61cb1b5a87e4ccd151828cb7bd2416b3f14009470402e3364b31bb6a92a91
+  specs/.specify/memory/constitution.md: 6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a
+  specs/001-core-pipeline/spec.md: 1a095743c37a0c3de7a3db36e9a0e8137aac8c92e7bb73096d0a5421a9d501f1
+environment_fingerprint:
+  digest: 1969aad71703957a6ea6e92f4a01ead19a8d625377011e404a69d7d94ddef921
+  runner: local-codex
+  operating_system: macOS 14.6 build 23G80
+  architecture: arm64
+  locale: C.UTF-8 (host fallback C)
+  timezone: Europe/Vienna
+  tool_versions:
+    python: 3.12.13
+    uv: 0.11.21
+consulted_paths:
+  - AGENTS.md
+  - PRD.md
+  - PLANNING.md
+  - TASKS.md
+  - SESSION_LOG.md
+  - specs/.specify/memory/constitution.md
+  - specs/HANDOFF.md
+  - specs/001-core-pipeline/spec.md
+  - specs/004-replay-eval-harness/spec.md
+  - docs/DECISIONS-2026-07-06-BUILD-AUDIT.md
+  - docs/DECISIONS-2026-07-06-REDTEAM.md
+  - packages/nest-core/README.md
+  - packages/nest-core/pyproject.toml
+  - packages/nest-core/src/nest_core/__init__.py
+  - packages/nest-core/tests/test_smoke.py
+  - pyproject.toml
+  - uv.lock
+observed_at: 2026-07-12T14:29:11Z
+```
+
+The merged T003 contract code validated both records with the annotated peel binding. The prior T003 snapshot canonical digest is `c012622a3bfe9f3136ca9a4c3381c1b3f75031938e3d2f16c962e89e8856bf68`; the current snapshot canonical digest is `f7e6a652952d9926aee59a272792820ea6b86850ed47c7cb10bc21b03e1c78fe`. The m0 capability manifest remains current: only `target-integrity/target-binding` is required/available; global-chain, T-014, T-015, T-016, and Ed25519 campaigns remain explicit reasoned unavailable skips at m0. T004 makes no target-specific behavior decision.
+
+**Refreshed primary evidence:** Official Python 3.12.13 documentation confirms exclusive creation, securely race-free `mkstemp`, file `fsync`, and hard-link creation. Official GitHub documentation still states private repositories may support 1-400 retention days subject to managing policy, changes are non-retroactive, and artifacts can be irreversibly deleted early. Exact URLs, supported claims, and dispositions are appended to `docs/research-register.md`. No dependency or lock change is needed.
+
+**Deep module and public Python interface:** Add `EvidenceStore(root)` with `put_json(logical_path, value) -> EvidenceObject`, `seal(manifest, maximum_retention_days=...) -> VerifiedEvidence`, and `verify(manifest_digest) -> VerifiedEvidence`. The store accepts canonical JSON values only and calls the existing `canonical_json_bytes` / `canonical_sha256`; there is no second serializer or digest implementation. `VerifiedEvidence` carries the validated `EvidenceManifest`, manifest digest, object count, and immutable retention metadata and is the later grading seam. Public typed errors distinguish integrity, write conflict, detectable-sensitive-data refusal, and unsupported retention setup. `python -m nef verify STORE_ROOT MANIFEST_DIGEST` performs offline read-only verification and prints canonical JSON on success.
+
+**Atomic/sealing semantics:** Canonical bytes stage through same-directory secure `mkstemp`, flush and `fsync`, then publish to the final digest-derived name with non-overwriting `os.link`; an existing identical object is idempotent, while existing different bytes are an error and never overwritten. The verifier requires regular non-symlink files, exact canonical bytes, canonical digest/path agreement, manifest schema validity, object size/digest agreement, retention metadata, and every referenced blob. `seal` validates retention and every blob, writes immutable retention metadata, and creates the manifest last; manifest presence is the seal marker. Missing/invalid evidence never yields `VerifiedEvidence`.
+
+**Retention, exclusions, and layout:** Requested retention is exactly 400 days. Missing or `<400` observed maximum raises a setup error; T004 neither queries nor changes GitHub. Detectable secret/key patterns and forbidden logical paths are refused on write and verify; non-detectable customer-data classification remains a producer allowlist responsibility and is stated honestly. Define `evidence/v1/blobs/sha256/<prefix>/<digest>.json`, `manifests/sha256/<prefix>/<digest>.json`, and `bundles/<manifest-digest>/retention.json`. The generic canonical blob/write-once substrate can later carry target snapshots; NEF-T005 still owns discovery indexes, hash chaining, stored-prior comparison, publication, and branch protection. No moved-tag durability is claimed.
+
+**Exact files:** Create `src/nef/evidence/store.py`, `tests/test_evidence_store.py`, `tests/test_evidence_cli.py`, and `docs/evidence-layout.md`. Update `src/nef/evidence/__init__.py`, `src/nef/cli.py`, `README.md`, `docs/retention-contract.md`, `docs/public-interfaces.md`, `docs/trust-model.md`, `docs/research-register.md`, `TASKS.md`, and `SESSION_LOG.md`. Frozen `*.schema.json`, `src/nef/contracts/canonical.py`, `src/nef/contracts/evidence.py`, `pyproject.toml`, `uv.lock`, workflows, target profiles, and NEST remain unchanged.
+
+**TDD sequence:** (1) `put_json` canonical-address tracer RED->GREEN; (2) idempotent same write and conflicting pre-existing bytes; (3) seal/verify happy path with manifest-last and retention; (4) tamper, truncation, missing blob, malformed/noncanonical manifest; (5) unsupported/missing retention; (6) detectable secret path/content rejection on write and verify; (7) CLI success/failure; (8) layout/document conformance. Each test crosses the public store/CLI interface and uses real temporary files, not mocked internals.
+
+**Sabotage and verification:** Each named failure path must turn a valid fixture non-valid, and an isolated source mutation must disable digest verification, write-conflict refusal, and retention refusal to prove the new tests go red. Before checkpoints run `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups`, Ruff format/check, strict mypy, full pytest, import-linter, Bandit, pip-audit, CLI subprocess smoke, frozen-schema/dependency/lock no-diff, CLAUDE invariant, target-clean check, staged diff, complete branch diff, exact remote SHA, and GitHub CI/gitleaks.
+
+**Risks / hard-stop audit / non-goals:** Risks are partial visibility, race overwrite, symlink/path escape, serializer drift, secret false negatives, confusing retention metadata with permanence, and overbuilding publication/history. Same-directory staged linking, verified canonical reads, path/digest validation, explicit detectable-only language, and narrow T005 ownership mitigate them. No new dependency, normative schema, provider, service, protocol shape, target baseline, threshold, GitHub setting, billing/secret, NEST write, publication, scheduling, watchdog, model code, or target execution is planned. No hard stop is active; any discovered need for those changes stops T004.
+
+**Exact next action:** Run the unchanged full local gate, commit/push this orientation checkpoint, open draft PR #3 against `main`, verify remote SHA and early CI, then begin only the first TDD tracer on the approved branch.
