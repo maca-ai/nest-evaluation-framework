@@ -105,15 +105,31 @@ of required passes.
 
 ## Read-only CLI
 
-`python -m nef` exposes three dependency-free argparse commands:
+`python -m nef` exposes four dependency-free argparse commands:
 
 - `validate CONTRACT PATH [--peel-binding TAG_REF_SHA=PEELED_SHA]`
 - `schema CONTRACT`
 - `aggregate PATH --required CAMPAIGN_ID [--required CAMPAIGN_ID ...]`
+- `verify STORE_ROOT MANIFEST_DIGEST`
 
 Successful output is canonical sorted-key UTF-8 JSON. Validation failures return nonzero and write
 an error to stderr. `--peel-binding` carries previously verified annotated-tag evidence; it is not
 a live resolver.
+
+## Evidence store
+
+```text
+EvidenceStore.put_json(logical_path, value) -> EvidenceObject
+EvidenceStore.seal(EvidenceManifest, maximum_retention_days=...) -> VerifiedEvidence
+EvidenceStore.verify(manifest_digest) -> VerifiedEvidence
+```
+
+The store uses only `canonical_json_bytes` and `canonical_sha256`, atomically creates final
+content-addressed paths without overwrite, and validates canonical bytes, digests, sizes,
+retention metadata, sensitive-data patterns, and every manifest reference before returning
+`VerifiedEvidence`. Typed errors distinguish integrity failure, write conflict, detectable
+sensitive material, and unsupported retention setup. The exact tree and residual trust boundary
+are defined in `docs/evidence-layout.md`.
 
 ## EvidenceManifest
 

@@ -73,6 +73,8 @@ validated secret-scanned source bundle
 
 - Seal raw evidence before grading.
 - Content-address every blob and validate every referenced digest.
+- Treat only a manifest created after its validated blobs and retention record as sealed; consume
+  only `VerifiedEvidence` at the later grading seam.
 - Aggregation consumes only validated manifests.
 - Missing or malformed evidence produces a non-pass state.
 - Reports are deterministic projections and cannot upgrade candidate authority.
@@ -100,3 +102,9 @@ validated secret-scanned source bundle
 - Model graders can be wrong; transcript and deterministic evidence remain available for human review.
 - Contract validation rejects a `tag_binding.state` label that contradicts the previous/current SHA pair carried by the same snapshot, but it cannot prove that the supplied previous pair came from retained history. Moved-tag detection is only as strong as NEF-T005 pin-target comparison against that history; deleting a prior snapshot can downgrade a moved tag to `first-seen` and evade detection. The named future hardening seam is append-only/hash-chained snapshot-manifest history owned by NEF-T004/T005; NEF-T002 records this residual but does not build that history.
 - Draft 2020-12 schema validation cannot enforce equality between instance fields or peel a Git object: a provisional `selector.pinned_sha` may differ from `resolved_sha`, and a gate `resolved_sha` may differ from `peel(tag_ref_sha)`, while remaining schema-valid. NEF-T003 contract-code validation rejects provisional inequality and requires verified annotated-tag peel evidence (with lightweight identity supported); NEF-T005 owns live Git peeling and supplies that evidence. Schema validity alone is not selector/SHA coherence evidence.
+- Detectable-secret scanning rejects known forbidden paths, field names, private-key headers, and
+  GitHub-token shapes, but cannot establish that arbitrary evidence is free of customer data or an
+  unknown credential format. Producer allowlisting and the isolated T005 publisher remain required.
+- T004's write-once canonical store is the substrate for snapshot history, not proof of its
+  completeness. Until T005 adds discovery, prior-binding comparison, hash chaining, publication,
+  and branch controls, moved-tag durability remains unimplemented.

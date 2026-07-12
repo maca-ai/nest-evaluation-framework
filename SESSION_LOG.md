@@ -834,3 +834,169 @@ The prior first-seen snapshot was re-parsed from its append-only journal YAML, v
 **Review-fix remote checkpoint:** Commit `226910444fb196865f2618754216c5e12cb28715` pushed additively to `origin/feat/NEF-T003-contracts-and-campaign-seam`; read-only remote verification returned the identical SHA. Draft PR #2 remains OPEN/DRAFT at `https://github.com/maca-ai/nest-evaluation-framework/pull/2` with the updated fix, 84-test result, sabotage proof, protocol digest, and narrowed prior-history claim. GitHub CI `verify`, including pinned gitleaks, passed at `https://github.com/maca-ai/nest-evaluation-framework/actions/runs/29195791692/job/86658397407`. GitHub still reports no native reviews or review threads; no merge occurred.
 
 **Final record boundary:** Commit and push this append-only remote evidence on the same branch, verify final local/remote SHA equality and green CI at the record tip, then stop for cross-vendor re-review/Matthias disposition. Keep PR #2 draft; do not mark T003 Done or begin T004.
+
+## 2026-07-12 - NEF-T004 orientation and decision-complete plan
+
+**Project / task / mode / Git state:** NEF, NEF-T004 Evidence store and offline verifier, active goal mode. Matthias reports final cross-vendor GO for PR #2; GitHub independently reports it MERGED with merge commit `544c6b498174d7a02603d7589d50247ba5b9ab41`, preserving review-fix and record commits. Local `main` was cleanly fast-forwarded to that exact `origin/main`, then branch `feat/NEF-T004-evidence-store-and-verifier` was created from it. T003 is Done; T004 is the sole In-progress and top eligible task. No direct-main push, rebase, or history rewrite occurred.
+
+**Live immutable target pin:** At `2026-07-12T14:29:11Z`, read-only `git ls-remote --tags https://github.com/maca-ai/nest.git` returned only annotated `m0`; no `m1` exists. Tag ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a` still peels to `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`. The disposable checkout at `.targets/nest/cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12` is detached and clean at tree `77ccd2fc1a41dd365a3b3b98508bb0534b56c95f`; its origin is credential-free and no checkout-local HTTP extraheader or credential helper exists. No target test/campaign ran and no target file was written. `NEST_REPO_PATH` is not configured, so no optional original checkout was inspected.
+
+### TargetDescriptor 2.0.0 - NEF-T004
+
+```yaml
+schema_version: 2.0.0
+repository_url: https://github.com/maca-ai/nest.git
+target_mode: gate-evidence
+selector:
+  kind: gate-tag
+  gate_tag: m0
+  tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+observed_at: 2026-07-12T14:29:11Z
+source_kind: remote
+```
+
+### TargetSnapshotManifest 2.0.0 - NEF-T004
+
+```yaml
+schema_version: 2.0.0
+repository_url: https://github.com/maca-ai/nest.git
+target_mode: gate-evidence
+selector:
+  kind: gate-tag
+  gate_tag: m0
+  tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+evidence_class: gate-evidence
+baseline_reproducibility: reproducible-baseline
+tag_binding:
+  state: unchanged
+  previous_snapshot_manifest_digest: c012622a3bfe9f3136ca9a4c3381c1b3f75031938e3d2f16c962e89e8856bf68
+  previous_tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+  previous_resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+dirty: false
+nef_sha: 544c6b498174d7a02603d7589d50247ba5b9ab41
+lock_digest: 9f5e25f611865b3e37951b5975c27af4ed1229a1610f7bff00418aa56059e853
+constitution_version: 1.3.0
+constitution_digest: 6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a
+protocol_digest: e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714
+relevant_source_digests:
+  docs/DECISIONS-2026-07-06-REDTEAM.md: 55e61cb1b5a87e4ccd151828cb7bd2416b3f14009470402e3364b31bb6a92a91
+  specs/.specify/memory/constitution.md: 6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a
+  specs/001-core-pipeline/spec.md: 1a095743c37a0c3de7a3db36e9a0e8137aac8c92e7bb73096d0a5421a9d501f1
+environment_fingerprint:
+  digest: 1969aad71703957a6ea6e92f4a01ead19a8d625377011e404a69d7d94ddef921
+  runner: local-codex
+  operating_system: macOS 14.6 build 23G80
+  architecture: arm64
+  locale: C.UTF-8 (host fallback C)
+  timezone: Europe/Vienna
+  tool_versions:
+    python: 3.12.13
+    uv: 0.11.21
+consulted_paths:
+  - AGENTS.md
+  - PRD.md
+  - PLANNING.md
+  - TASKS.md
+  - SESSION_LOG.md
+  - specs/.specify/memory/constitution.md
+  - specs/HANDOFF.md
+  - specs/001-core-pipeline/spec.md
+  - specs/004-replay-eval-harness/spec.md
+  - docs/DECISIONS-2026-07-06-BUILD-AUDIT.md
+  - docs/DECISIONS-2026-07-06-REDTEAM.md
+  - packages/nest-core/README.md
+  - packages/nest-core/pyproject.toml
+  - packages/nest-core/src/nest_core/__init__.py
+  - packages/nest-core/tests/test_smoke.py
+  - pyproject.toml
+  - uv.lock
+observed_at: 2026-07-12T14:29:11Z
+```
+
+The merged T003 contract code validated both records with the annotated peel binding. The prior T003 snapshot canonical digest is `c012622a3bfe9f3136ca9a4c3381c1b3f75031938e3d2f16c962e89e8856bf68`; the current snapshot canonical digest is `f7e6a652952d9926aee59a272792820ea6b86850ed47c7cb10bc21b03e1c78fe`. The m0 capability manifest remains current: only `target-integrity/target-binding` is required/available; global-chain, T-014, T-015, T-016, and Ed25519 campaigns remain explicit reasoned unavailable skips at m0. T004 makes no target-specific behavior decision.
+
+**Refreshed primary evidence:** Official Python 3.12.13 documentation confirms exclusive creation, securely race-free `mkstemp`, file `fsync`, and hard-link creation. Official GitHub documentation still states private repositories may support 1-400 retention days subject to managing policy, changes are non-retroactive, and artifacts can be irreversibly deleted early. Exact URLs, supported claims, and dispositions are appended to `docs/research-register.md`. No dependency or lock change is needed.
+
+**Deep module and public Python interface:** Add `EvidenceStore(root)` with `put_json(logical_path, value) -> EvidenceObject`, `seal(manifest, maximum_retention_days=...) -> VerifiedEvidence`, and `verify(manifest_digest) -> VerifiedEvidence`. The store accepts canonical JSON values only and calls the existing `canonical_json_bytes` / `canonical_sha256`; there is no second serializer or digest implementation. `VerifiedEvidence` carries the validated `EvidenceManifest`, manifest digest, object count, and immutable retention metadata and is the later grading seam. Public typed errors distinguish integrity, write conflict, detectable-sensitive-data refusal, and unsupported retention setup. `python -m nef verify STORE_ROOT MANIFEST_DIGEST` performs offline read-only verification and prints canonical JSON on success.
+
+**Atomic/sealing semantics:** Canonical bytes stage through same-directory secure `mkstemp`, flush and `fsync`, then publish to the final digest-derived name with non-overwriting `os.link`; an existing identical object is idempotent, while existing different bytes are an error and never overwritten. The verifier requires regular non-symlink files, exact canonical bytes, canonical digest/path agreement, manifest schema validity, object size/digest agreement, retention metadata, and every referenced blob. `seal` validates retention and every blob, writes immutable retention metadata, and creates the manifest last; manifest presence is the seal marker. Missing/invalid evidence never yields `VerifiedEvidence`.
+
+**Retention, exclusions, and layout:** Requested retention is exactly 400 days. Missing or `<400` observed maximum raises a setup error; T004 neither queries nor changes GitHub. Detectable secret/key patterns and forbidden logical paths are refused on write and verify; non-detectable customer-data classification remains a producer allowlist responsibility and is stated honestly. Define `evidence/v1/blobs/sha256/<prefix>/<digest>.json`, `manifests/sha256/<prefix>/<digest>.json`, and `bundles/<manifest-digest>/retention.json`. The generic canonical blob/write-once substrate can later carry target snapshots; NEF-T005 still owns discovery indexes, hash chaining, stored-prior comparison, publication, and branch protection. No moved-tag durability is claimed.
+
+**Exact files:** Create `src/nef/evidence/store.py`, `tests/test_evidence_store.py`, `tests/test_evidence_cli.py`, and `docs/evidence-layout.md`. Update `src/nef/evidence/__init__.py`, `src/nef/cli.py`, `README.md`, `docs/retention-contract.md`, `docs/public-interfaces.md`, `docs/trust-model.md`, `docs/research-register.md`, `TASKS.md`, and `SESSION_LOG.md`. Frozen `*.schema.json`, `src/nef/contracts/canonical.py`, `src/nef/contracts/evidence.py`, `pyproject.toml`, `uv.lock`, workflows, target profiles, and NEST remain unchanged.
+
+**TDD sequence:** (1) `put_json` canonical-address tracer RED->GREEN; (2) idempotent same write and conflicting pre-existing bytes; (3) seal/verify happy path with manifest-last and retention; (4) tamper, truncation, missing blob, malformed/noncanonical manifest; (5) unsupported/missing retention; (6) detectable secret path/content rejection on write and verify; (7) CLI success/failure; (8) layout/document conformance. Each test crosses the public store/CLI interface and uses real temporary files, not mocked internals.
+
+**Sabotage and verification:** Each named failure path must turn a valid fixture non-valid, and an isolated source mutation must disable digest verification, write-conflict refusal, and retention refusal to prove the new tests go red. Before checkpoints run `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups`, Ruff format/check, strict mypy, full pytest, import-linter, Bandit, pip-audit, CLI subprocess smoke, frozen-schema/dependency/lock no-diff, CLAUDE invariant, target-clean check, staged diff, complete branch diff, exact remote SHA, and GitHub CI/gitleaks.
+
+**Risks / hard-stop audit / non-goals:** Risks are partial visibility, race overwrite, symlink/path escape, serializer drift, secret false negatives, confusing retention metadata with permanence, and overbuilding publication/history. Same-directory staged linking, verified canonical reads, path/digest validation, explicit detectable-only language, and narrow T005 ownership mitigate them. No new dependency, normative schema, provider, service, protocol shape, target baseline, threshold, GitHub setting, billing/secret, NEST write, publication, scheduling, watchdog, model code, or target execution is planned. No hard stop is active; any discovered need for those changes stops T004.
+
+**Exact next action:** Run the unchanged full local gate, commit/push this orientation checkpoint, open draft PR #3 against `main`, verify remote SHA and early CI, then begin only the first TDD tracer on the approved branch.
+
+## 2026-07-12 - NEF-T004 implementation checkpoint
+
+**Task / milestone / branch:** NEF-T004 Evidence store and offline verifier, v1 foundation milestone, `feat/NEF-T004-evidence-store-and-verifier`. Orientation commit `6b5c62a1fbf00fcb5650fed3532f33bf31440154` was pushed with exact remote equality and opened as draft PR #3 at `https://github.com/maca-ai/nest-evaluation-framework/pull/3` before implementation. T004 remains In progress pending CI, spec-blind/cross-vendor review, and Matthias's merge disposition; T005 has not started.
+
+**Target provenance:** The immutable target remains gate tag `m0`, tag-ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled SHA `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`, target protocol digest `e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714`, and T004 snapshot digest `f7e6a652952d9926aee59a272792820ea6b86850ed47c7cb10bc21b03e1c78fe`. The detached target checkout remains clean and no target code or test was executed. Live orientation found no `m1` tag.
+
+**Files changed:** Added `src/nef/evidence/store.py`, `tests/test_evidence_store.py`, `tests/test_evidence_cli.py`, and `docs/evidence-layout.md`. Updated `src/nef/evidence/__init__.py`, `src/nef/cli.py`, `README.md`, `docs/retention-contract.md`, `docs/public-interfaces.md`, `docs/trust-model.md`, and this append-only record. No normative schema, contract canonicalizer, EvidenceManifest contract, dependency, lockfile, workflow, capability profile, or NEST file changed.
+
+**Implementation and decisions:** `EvidenceStore` writes JSON using only the existing `canonical_json_bytes` and `canonical_sha256`, returns the unchanged `EvidenceObject`, and publishes same-directory flushed temporary bytes by non-overwriting hard link. Existing identical bytes are idempotent; different bytes are a typed conflict and remain untouched. `seal` requires an observed maximum of at least 400 days, verifies every referenced canonical JSON blob, writes honest non-permanence retention metadata, and creates the canonical content-addressed `EvidenceManifest` last. `verify` rejects non-lowercase/non-SHA-256 addresses, missing/non-regular/symlinked files, malformed/non-canonical JSON, digest or size mismatch, invalid manifests, invalid retention metadata, and detectable forbidden evidence before returning the immutable `VerifiedEvidence` grading seam. `python -m nef verify STORE_ROOT MANIFEST_DIGEST` exposes the network-free verifier and emits a canonical summary.
+
+**Trust and risk disposition:** The local layout is `evidence/v1/blobs/sha256/<prefix>/<digest>.json`, `manifests/sha256/<prefix>/<digest>.json`, and `bundles/<manifest-digest>/retention.json`. Detectable `.env`/credential/secret paths, sensitive field names, private-key headers, and GitHub token shapes are refused after canonical normalization on both write and verification. This scan cannot prove arbitrary input is free of customer data or unknown secret formats; producer allowlisting remains mandatory. Retention metadata records policy intent, not permanence. The write-once store supplies T005's append-only substrate but does not provide discovery, prior-binding comparison, hash chaining, GitHub publication/protection, or durable moved-tag detection.
+
+**TDD and test delta:** The first focused run was intentionally RED at collection because the public evidence types did not exist. The implemented focused suite is PASS with 26 cases. Full pytest grew from 84 to 110 tests (+26): canonical address/UTF-8/no-float, idempotent and conflicting duplicate writes, seal/verify success, missing-before-seal behavior, absent/short/tampered retention, tamper, truncation, missing blob, malformed and non-canonical manifest, symlink refusal, detectable sensitive path/content/model serialization, and CLI success/failure.
+
+**Constitution IV sabotage proof:** An isolated `/tmp` copy disabled three independent checks without changing the working tree: digest comparison was replaced by `False`, conflicting-byte refusal was replaced by `False`, and the `<400`/missing retention guard was replaced by `False`. The selected sabotage run collected four cases and failed all four as expected: tampered blob DID NOT RAISE, conflicting digest path DID NOT RAISE, and both `None` and `399` retention cases raised the wrong downstream integrity error instead of `RetentionSetupError`. This proves the committed tests depend on each claimed mechanism.
+
+**Verification evidence:** `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups` — PASS (67 resolved, 65 checked); `uv run --locked ruff format --check .` — PASS (34 files); `uv run --locked ruff check .` — PASS; `uv run --locked mypy --strict src tests scripts` — PASS (34 files); `uv run --locked pytest` — PASS (110); `PYTHONPATH=src uv run --locked lint-imports` — PASS (20 files, 30 dependencies, contract kept); `uv run --locked bandit -c pyproject.toml -r src scripts` — PASS (zero issues); locked all-group `pip-audit --strict` — PASS (no known vulnerabilities); subprocess `python -m nef verify` against a real sealed temporary store — PASS with canonical `verified:true`; frozen schema/dependency/lock/canonicalizer/EvidenceManifest diff — empty; `CLAUDE.md` raw bytes remain exactly `@AGENTS.md` plus LF; detached m0 target status — clean. An initial standalone smoke command omitted the repository's required `PYTHONPATH=src` and failed import; the corrected command passed and no product change was needed.
+
+**Known limitations / hard-stop audit:** Standard filesystem and host administrators can rewrite or delete local/branch evidence; no external anchor exists. Retention observation is an explicit caller input until T005 reads the GitHub policy. Pattern scans are deliberately detectable-only. T004 supports canonical JSON objects, not arbitrary binary media. No dependency, schema/protocol, threshold/baseline, hosted service, provider, secret, GitHub setting, publication, workflow, target execution, or NEST mutation was introduced; no hard stop was encountered.
+
+**Exact next action:** Rerun the final full gate with this journal entry present, review the complete `main...HEAD` and staged diffs, commit only the eleven listed files, push to the existing branch, verify exact remote SHA, update draft PR #3 with final evidence, wait for green CI, and stop for the required independent review/Matthias disposition without merging or starting T005.
+
+## 2026-07-12 - NEF-T004 trusted-review sentinel fix plan
+
+**Authority / task / state:** Active goal continuation resumes NEF-T004 on the existing `feat/NEF-T004-evidence-store-and-verifier` branch and draft PR #3 at clean local/remote SHA `9385661ba641357588605e4a59ce4609b1c22791`. Ordinary GitHub CI, including gitleaks, is green. The trusted default-branch spec-blind workflow run `29197195782` failed before any provider request with `spec-blind review error: pull-request diff matched a secret pattern`. Local validation of the complete `main...HEAD` diff through the trusted `scripts.spec_blind_review.validate_diff` reproduces the same `ReviewInputError`.
+
+**Root cause and decision:** T004 correctly added a detector and sabotage fixture for a PEM private-key header, but the contiguous synthetic sentinel in `src/nef/evidence/store.py` and `tests/test_evidence_store.py` is itself indistinguishable from leaked key material to the trusted diff gate. Preserve runtime behavior while making the source representation non-secret-shaped: express the regular expression with quantified hyphens and construct the synthetic test marker from adjacent non-matching fragments. The assembled runtime value remains exactly the forbidden header and the existing public `put_json` rejection test must stay green. This is a representation-only CI compatibility fix, not a weakening or exception in either scanner.
+
+**Exact files / interfaces:** Modify only `src/nef/evidence/store.py`, `tests/test_evidence_store.py`, and this append-only `SESSION_LOG.md`. No public interface, contract, schema, protocol, dependency, lockfile, workflow, trusted reviewer, task state, target profile, or NEST file changes.
+
+**Verification and sabotage:** First retain the reproduced RED evidence above. After the minimal edit, run the focused secret-rejection case and full evidence tests, then validate the complete working-tree PR diff with the unchanged trusted-main `validate_diff`; it must pass while `EvidenceStore.put_json` still raises `SensitiveEvidenceError` for the runtime-assembled private-key marker. Run the complete locked local gate: sync, Ruff format/check, strict mypy, full pytest, import-linter, Bandit, dependency audit, CLI smoke, frozen-artifact no-diff, CLAUDE invariant, target-clean check, staged diff, and complete branch diff. GitHub CI and the automatically triggered trusted review must both complete successfully after the additive push.
+
+**Risks / hard-stop audit:** The only substantive risk is accidentally weakening private-key detection to satisfy the outer diff scanner. The public rejection test plus direct runtime regex assertion prevent that. No target-specific behavior is decided, so the current m0 snapshot and capability manifest remain current without repinning. No frozen artifact, service, provider, billing/secret configuration, external policy, NEST source, history rewrite, or scope expansion is required; no hard stop is active.
+
+**Exact next action:** Apply the two sentinel-representation edits, prove runtime rejection and trusted-diff acceptance together, run the full gate, append the results, review the three-file checkpoint and complete PR diff, commit additively, push the same branch, verify exact remote SHA, update draft PR #3, and require both CI and trusted spec-blind review evidence before returning to the review/merge boundary.
+
+### Trusted-review sentinel fix verification
+
+**Files and behavior:** Only `src/nef/evidence/store.py`, `tests/test_evidence_store.py`, and `SESSION_LOG.md` changed. The private-key detector now expresses each five-hyphen delimiter as regex quantification, and the synthetic fixture assembles the same runtime marker from two non-secret-shaped source fragments. No accepted/rejected runtime value, public interface, schema, dependency, lockfile, workflow, trusted reviewer, target artifact, or task state changed.
+
+**RED/GREEN and sabotage evidence:** Before the edit, the unchanged trusted-main `validate_diff` rejected the complete PR diff with `ReviewInputError: pull-request diff matched a secret pattern`, matching GitHub run `29197195782`. After the edit, the same validator accepted the complete working-tree PR diff. The six focused sensitive-evidence cases all passed, including public rejection of the assembled private-key marker. In an isolated `/tmp` copy, changing only the quantified opening delimiter from five to six hyphens caused exactly the private-key-marker case to fail with `DID NOT RAISE SensitiveEvidenceError` while the other five sensitive vectors remained green; sabotage exit 1 is the expected PASS evidence that the rewritten detector remains test-sensitive.
+
+**Local verification:** `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups` — PASS (67 resolved, 65 checked); `uv run --locked ruff format --check .` — PASS (34 files); `uv run --locked ruff check .` — PASS; `uv run --locked mypy --strict src tests scripts` — PASS (34 files); `uv run --locked pytest` — PASS (110 tests); `PYTHONPATH=src uv run --locked lint-imports` — PASS (20 files, 30 dependencies, contract kept); `uv run --locked bandit -c pyproject.toml -r src scripts` — PASS (zero issues); locked production dependency export plus `pip-audit --disable-pip --require-hashes` — PASS (no known vulnerabilities); subprocess `python -m nef verify` against the retained sealed temporary store — PASS with canonical `verified:true`; trusted complete-diff validation — PASS. Frozen schemas, workflows, dependencies, lockfile, canonicalizer, and EvidenceManifest diff remain empty; `CLAUDE.md` remains exactly `@AGENTS.md` plus LF; the detached m0 target remains clean.
+
+**Checkpoint state / limitations / next action:** The initial implementation commit and ordinary CI remain valid; the failed trusted review is retained as evidence rather than relabelled. Pattern scanning remains detectable-only, and this change does not claim broader secret coverage. Review the staged three-file fix and complete branch diff, commit and push additively, verify exact remote SHA, update draft PR #3, require green ordinary CI plus a successful trusted workflow run, then stop for independent cross-vendor review and Matthias's merge disposition. Do not merge or begin T005.
+
+## 2026-07-12 - NEF-T004 cross-vendor fixture-only disposition
+
+**Authority / state reconciliation:** Matthias supplied a GO-WITH-FIXES disposition naming the test fixture as the only offending diff line, explicitly ruling that `src/nef/evidence/store.py` needs no change, and requiring one additive commit without rebase. The supplied starting SHA was `9385661`, but authoritative local and remote inspection found the branch already at `59605e0`; that prior additive commit had unnecessarily changed the store regex as well as fragmenting the fixture. History will not be rewritten. The unique additive path to the newly approved final state is to restore `store.py` byte-for-byte to its reviewed `9385661` content in the same corrective commit, apply the stronger runtime-only fixture fragmentation plus explanatory comment, and append this superseding record. The final PR tree therefore has no store implementation delta attributable to the review fix.
+
+**Exact files / interface:** The corrective commit necessarily contains the byte-for-byte restoration of `src/nef/evidence/store.py`, the approved fixture/comment change in `tests/test_evidence_store.py`, and `SESSION_LOG.md`. No other file changes. No runtime behavior, public interface, schema, dependency, lockfile, workflow, reviewer, target profile, or NEST artifact changes.
+
+**Fixture design and verification:** Assemble the exact forbidden marker at runtime with `"".join(("-----BEGIN ", "PRIVATE ", "KEY-----"))`; keep a nearby comment explaining that trusted spec-blind diff validation refuses contiguous secret-shaped literals. Assert byte identity with the original fixture through the existing public rejection case, validate the complete PR diff using unchanged trusted-main `validate_diff`, and prove sabotage by disabling the store secret scan only in an isolated copy so the sentinel case fails. Run the full locked local gate, review the three-file corrective commit and complete branch diff, and require both ordinary GitHub CI and the trusted spec-blind workflow to succeed after push.
+
+**Risks / hard-stop audit / next action:** Risk is preserving an unnecessary store source change or accidentally weakening the test while making the diff safe. Exact comparison against `9385661`, public rejection, isolated sabotage, and trusted full-diff validation close those risks. No target-specific decision or hard-stop expansion is involved. Apply the restoration and fixture/comment edit, verify, append final evidence, create exactly one additive commit on the existing branch, push, verify SHA equality, keep PR #3 draft, and stop at the review/merge boundary.
+
+### Fixture-only disposition verification
+
+**Final tree and files:** `src/nef/evidence/store.py` is byte-identical to its reviewed `9385661` version; `git diff --exit-code 9385661 -- src/nef/evidence/store.py` passed. The effective review fix is only the runtime-fragmented fixture and explanatory comment in `tests/test_evidence_store.py`; this append-only journal supersedes the earlier over-broad store-change description. Because history is append-only, the corrective commit also carries the mechanical restoration of the store file from `59605e0` without leaving any store implementation delta in the final PR tree.
+
+**Behavior and sabotage:** The assembled fixture remains byte-identical to the prior forbidden marker and all six focused sensitive-evidence cases passed. The complete PR diff passed unchanged trusted-main `validate_diff`. In an isolated copy, disabling only the `put_json` call to the store secret scanner made the exact fragmented private-key case fail with `DID NOT RAISE SensitiveEvidenceError`; sabotage exit 1 is the expected PASS evidence that the fixture remains self-checking.
+
+**Local gate:** `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups` — PASS (67 resolved, 65 checked); `uv run --locked ruff format --check .` — PASS (34 files); `uv run --locked ruff check .` — PASS; `uv run --locked mypy --strict src tests scripts` — PASS (34 files); `uv run --locked pytest` — PASS (110 tests, delta 0); `PYTHONPATH=src uv run --locked lint-imports` — PASS (20 files, 30 dependencies, contract kept); `uv run --locked bandit -c pyproject.toml -r src scripts` — PASS (zero issues). No schema, dependency, lockfile, workflow, reviewer, public interface, target profile, or NEST change exists.
+
+**Exact next action:** Review and stage only `src/nef/evidence/store.py` as the required restoration, `tests/test_evidence_store.py` as the sole effective fix, and `SESSION_LOG.md`; create exactly one additive Conventional Commit on the existing branch, push, verify exact local/remote SHA equality, keep PR #3 draft, and require both ordinary CI and the trusted spec-blind review workflow to complete successfully. Do not merge or start T005.

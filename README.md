@@ -26,6 +26,19 @@ peeled commit SHA. Pre-gate work requires an explicitly acknowledged provisional
 is always labelled non-gate evidence/non-reproducible baseline. Branches, `HEAD`, and moving refs
 are never campaign selectors, and gate selection never silently falls back to provisional mode.
 
+## Offline evidence verification
+
+T004 evidence uses one canonical, content-addressed JSON store. Given a local store root and sealed
+manifest digest, verification executes no target code and performs no network access:
+
+```sh
+uv run --locked python -m nef verify STORE_ROOT MANIFEST_DIGEST
+```
+
+Only a fully validated `VerifiedEvidence` result is eligible for later grading. The local layout,
+400-day retention setup requirement, non-permanence boundary, and T005 publication/history seam
+are documented in `docs/evidence-layout.md`.
+
 ## Trust boundary
 
 Pull-request CI may execute PR code but receives no provider secret or repository write
