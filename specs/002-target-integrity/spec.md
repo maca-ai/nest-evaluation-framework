@@ -156,6 +156,7 @@ The `de8c077...` orientation predates this amendment and is retained as provisio
 - `m10` and `m9` exist: select `m10`, never lexical `m9`.
 - A lightweight gate tag has tag-ref SHA equal to commit SHA: valid identity peel.
 - A prior annotated tag becomes lightweight at the same commit: moved tag because the tag-ref binding changed.
+- A gate snapshot whose `tag_binding.state` contradicts its own previous/current SHA pair is invalid at contract validation; this intra-object check does not prove that the supplied previous pair came from retained history, which remains NEF-T005 pin-target work.
 - Gate selection finds no eligible tag: refuse without provisional fallback.
 - Remote resolution succeeds but checkout contains a different HEAD: error.
 - Target checkout becomes dirty during inspection: harness error.

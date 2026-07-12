@@ -231,24 +231,111 @@ def campaign_request() -> dict[str, object]:
     }
 
 
-def moved_gate_snapshot() -> dict[str, object]:
+def gate_snapshot(
+    *,
+    state: str,
+    previous_tag_ref_sha: str,
+    previous_resolved_sha: str,
+    tag_ref_sha: str = SHA_A,
+    resolved_sha: str = SHA_A,
+) -> dict[str, object]:
     snapshot = provisional_snapshot()
     snapshot.update(
         {
             "target_mode": "gate-evidence",
-            "selector": {"kind": "gate-tag", "gate_tag": "m0", "tag_ref_sha": SHA_A},
-            "resolved_sha": SHA_B,
+            "selector": {
+                "kind": "gate-tag",
+                "gate_tag": "m0",
+                "tag_ref_sha": tag_ref_sha,
+            },
+            "resolved_sha": resolved_sha,
             "evidence_class": "gate-evidence",
             "baseline_reproducibility": "reproducible-baseline",
             "tag_binding": {
-                "state": "moved",
+                "state": state,
                 "previous_snapshot_manifest_digest": SHA256_A,
-                "previous_tag_ref_sha": SHA_A,
-                "previous_resolved_sha": SHA_A,
+                "previous_tag_ref_sha": previous_tag_ref_sha,
+                "previous_resolved_sha": previous_resolved_sha,
             },
         }
     )
     return snapshot
+
+
+def moved_gate_snapshot() -> dict[str, object]:
+    return gate_snapshot(
+        state="moved",
+        tag_ref_sha=SHA_A,
+        resolved_sha=SHA_B,
+        previous_tag_ref_sha=SHA_A,
+        previous_resolved_sha=SHA_A,
+    )
+
+
+def test_snapshot_rejects_unchanged_label_when_previous_binding_differs() -> None:
+    snapshot = moved_gate_snapshot()
+    cast(dict[str, Any], snapshot["tag_binding"])["state"] = "unchanged"
+
+    with pytest.raises(ValidationError, match="unchanged tag binding must match current binding"):
+        TargetSnapshotManifest.model_validate(snapshot, context={"peel_bindings": {SHA_A: SHA_B}})
+
+
+def test_campaign_request_rejects_mislabeled_unchanged_binding() -> None:
+    snapshot = gate_snapshot(
+        state="unchanged",
+        previous_tag_ref_sha=SHA_B,
+        previous_resolved_sha=SHA_B,
+    )
+    request = campaign_request()
+    request["target_snapshot_manifest"] = snapshot
+    request["target_snapshot_manifest_digest"] = canonical_sha256(snapshot)
+
+    with pytest.raises(ValidationError, match="unchanged tag binding must match current binding"):
+        CampaignRequest.model_validate(request)
+
+
+def test_snapshot_rejects_moved_label_when_binding_is_unchanged() -> None:
+    snapshot = gate_snapshot(
+        state="moved",
+        previous_tag_ref_sha=SHA_A,
+        previous_resolved_sha=SHA_A,
+    )
+
+    with pytest.raises(ValidationError, match="moved tag binding must differ from current binding"):
+        TargetSnapshotManifest.model_validate(snapshot)
+
+
+def test_coherent_unchanged_binding_remains_executable() -> None:
+    snapshot = gate_snapshot(
+        state="unchanged",
+        previous_tag_ref_sha=SHA_A,
+        previous_resolved_sha=SHA_A,
+    )
+    validated_snapshot = TargetSnapshotManifest.model_validate(snapshot)
+    assert validated_snapshot.tag_binding is not None
+    assert validated_snapshot.tag_binding.state == "unchanged"
+
+    request = campaign_request()
+    request["target_snapshot_manifest"] = snapshot
+    request["target_snapshot_manifest_digest"] = canonical_sha256(snapshot)
+    assert CampaignRequest.model_validate(request).target_snapshot_manifest == validated_snapshot
+
+
+def test_coherent_moved_binding_is_evidence_but_not_executable() -> None:
+    snapshot = gate_snapshot(
+        state="moved",
+        previous_tag_ref_sha=SHA_B,
+        previous_resolved_sha=SHA_B,
+    )
+    validated_snapshot = TargetSnapshotManifest.model_validate(snapshot)
+    assert validated_snapshot.tag_binding is not None
+    assert validated_snapshot.tag_binding.state == "moved"
+
+    request = campaign_request()
+    request["target_snapshot_manifest"] = snapshot
+    request["target_snapshot_manifest_digest"] = canonical_sha256(snapshot)
+    with pytest.raises(ValidationError, match="moved target binding cannot execute"):
+        CampaignRequest.model_validate(request)
 
 
 def test_campaign_request_rejects_moved_or_incoherent_target_evidence() -> None:

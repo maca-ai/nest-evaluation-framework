@@ -789,3 +789,44 @@ The prior first-seen snapshot was re-parsed from its append-only journal YAML, v
 **Implementation remote checkpoint:** Commit `2b8829cafbd4e5385c81675a83076daa1f7c90eb` pushed additively to `origin/feat/NEF-T003-contracts-and-campaign-seam`; `git ls-remote` returned the identical SHA. Draft PR #2 remains OPEN/DRAFT at `https://github.com/maca-ai/nest-evaluation-framework/pull/2`, base `main`, with the required summary/rationale/verification/risk/rollback/target notes. GitHub CI `verify` passed at the implementation tip, including its pinned gitleaks scan, at `https://github.com/maca-ai/nest-evaluation-framework/actions/runs/29194964575/job/86656195351`. No reviews or merge occurred.
 
 **Record-checkpoint boundary:** Commit and push this append-only remote evidence on the same branch, verify final local/remote SHA equality, and require CI green at that final tip. Keep PR #2 draft and stop for independent review/Matthias disposition; do not merge, mark T003 Done, or begin T004.
+
+## 2026-07-12 - NEF-T003 cross-vendor binding-label review fix plan
+
+**Authority / task / state:** Matthias supplied one verified SEV-3 cross-vendor finding and authorized only its minimal fix on existing branch `feat/NEF-T003-contracts-and-campaign-seam`, draft PR #2, starting at clean HEAD `d26a6498f2d6f49f852f70af9399af90b40d910d`. NEF-T003 remains the only In-progress task in active goal mode. GitHub's thread-aware PR read contains no native comments, reviews, or threads; the supplied finding is the sole actionable item.
+
+**Finding and seam:** `TagBinding` validates whether prior fields are structurally present, but cannot compare them with current selector/snapshot values. `TargetSnapshotManifest._validate_snapshot_coherence` is the deep module seam that sees both pairs. It will require `unchanged` to mean exact prior/current pair equality and `moved` to mean at least one pair member differs. `first-seen` remains governed by `TagBinding`. This closes only intra-object label coherence; it does not authenticate the label or compare stored prior snapshots, which remain NEF-T005 pin-target responsibilities.
+
+**Exact files and interfaces:** Modify `src/nef/contracts/target.py`, `tests/test_contract_models.py`, `specs/002-target-integrity/spec.md`, `docs/trust-model.md`, `TASKS.md`, and this append-only `SESSION_LOG.md`. No public field, method, schema version, normative `*.schema.json`, dependency, lockfile, workflow, target profile, or campaign interface changes.
+
+**TDD sequence and acceptance:** Add one public-interface snapshot test for mislabeled `unchanged`; prove RED, add the minimal snapshot validator, prove GREEN. Then add the executable CampaignRequest regression, incoherent `moved` rejection, coherent `unchanged` executable acceptance, and coherent `moved` violation-evidence acceptance plus request refusal, running focused tests after each behavior. Error messages stay in existing style. Update spec/trust wording only after behavior is green.
+
+**Sabotage / verification:** In an isolated `/tmp` source copy, disable only the new binding-label coherence conditions and require the new tests to fail while repository source remains unchanged. Before checkpoint run `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups`, Ruff format/check, strict mypy, full pytest, import-linter, and Bandit; also require focused RED/GREEN evidence, schema/dependency/lock no-diff, CLAUDE invariant, `git diff --check`, staged diff, complete PR diff, exact remote SHA, draft PR state, and green CI/gitleaks.
+
+**Risks / hard-stop audit:** Primary risks are overclaiming comparison against retained history, accidentally rejecting coherent first-seen evidence, or modifying frozen schemas. Tests separate structural history, local pair coherence, and executable refusal. True prior-history verification remains explicit. No dependency, frozen schema, protocol shape, baseline, threshold, provider, service, secret, NEST write, live resolver, or external policy change is needed; no hard stop applies.
+
+**Exact next action:** Add the single mislabeled-`unchanged` snapshot test and demonstrate RED before changing contract implementation.
+
+### NEF-T003 binding-label review-fix checkpoint
+
+**Files changed:** `src/nef/contracts/target.py`, `tests/test_contract_models.py`, `specs/002-target-integrity/spec.md`, `docs/trust-model.md`, `TASKS.md`, and `SESSION_LOG.md` only. Normative schemas, generated-schema contracts, dependencies, `uv.lock`, workflows, public fields, and other implementation modules are unchanged.
+
+**Behavior and scope:** Gate snapshot validation now cross-checks `tag_binding.state` against the previous/current SHA pairs carried by that same object. `unchanged` requires equality of both tag-ref and resolved SHAs; `moved` requires at least one difference; `first-seen` retains its existing structural rule. Nested CampaignRequest validation therefore rejects a mislabeled moved tag before it can bypass the existing `state == moved` execution refusal. Coherent unchanged snapshots remain executable, and coherent moved snapshots remain valid violation evidence but cannot form executable requests. This does not authenticate the supplied prior pair or compare retained history; NEF-T005 pin-target still owns that external comparison.
+
+**TDD and sabotage proof:** The first mislabeled-`unchanged` snapshot probe was RED with `DID NOT RAISE`; the minimal equality validator made it GREEN. The inverse same-pair `moved` probe was independently RED with `DID NOT RAISE`; the minimal inequality validator made it GREEN. Three further public-interface cases cover the CampaignRequest bypass and both coherent preservation paths. In an isolated `/tmp` copy, replacing only the new `unchanged` and `moved` condition predicates with `False` caused exactly three expected failures: snapshot mislabeled unchanged, executable-input bypass, and incoherent moved. The coherent unchanged/moved preservation tests remained green. Sabotage pytest exit 1: PASS.
+
+**Verification results:**
+
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups` - PASS; 67 packages resolved and 65 checked.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked ruff format --check .` - PASS; 31 files already formatted.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked ruff check .` - PASS.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked mypy --strict src tests scripts` - PASS; zero issues in 31 files.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked pytest` - PASS; 84 tests, up from 79 (+5).
+- `PYTHONPATH=src UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked lint-imports` - PASS; 19 files/27 dependencies, contract boundary kept.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked bandit -q -r src scripts` - PASS.
+- Focused five-case review suite - PASS; all acceptance cases green.
+- Isolated binding-label mutation - PASS; three expected failures and two coherent-case passes, sabotage exit 1.
+- `git diff --check` - PASS; CLAUDE invariant PASS; frozen-schema diff empty; dependency/lock diff empty.
+
+**Target / protocol evidence:** This review fix makes no new target-specific decision. The current NEST target remains annotated m0, tag ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled SHA `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`, target protocol digest `e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714`; its capability manifest remains current. The established 14-file NEF protocol digest is now `e013c237b8b39213dd776ae971b22bbb43e2de275697d4aae99a9f9deecc4a72`, reflecting only spec-002 (`782a00341adf63a230495bc0bdb2f0bda7e55cef06b2f5eb2ccedb43f44b94d1`) and trust-model (`c58d63e040865bc7ae85bc01a1495f1ba0c8d392588a360f8745f9cd473ba58c`) wording changes among protocol inputs; all schema digests are unchanged.
+
+**Risks / hard-stop audit / next action:** The label and previous pair remain only as trustworthy as the future pin-target producer; prior-history deletion remains an explicit limitation. No frozen schema, dependency, protocol shape, baseline, threshold, provider, service, secret, target source, live resolver, or external policy changed, so no hard stop was encountered. Re-run the full local gate after this journal append, review the six-file staged and complete PR diffs, commit and push additively to the same branch, verify exact remote SHA, update draft PR #2, require green CI/gitleaks, and stop for independent review. Do not resolve/reply to nonexistent GitHub threads, merge, or begin NEF-T004.

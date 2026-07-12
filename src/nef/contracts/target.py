@@ -187,6 +187,17 @@ class TargetSnapshotManifest(ContractModel):
         if self.tag_binding is None:
             raise ValueError("gate targets require a tag binding")
         _require_verified_peel(self.selector, self.resolved_sha, info)
+        if self.tag_binding.state == "unchanged" and (
+            self.tag_binding.previous_tag_ref_sha != self.selector.tag_ref_sha
+            or self.tag_binding.previous_resolved_sha != self.resolved_sha
+        ):
+            raise ValueError("unchanged tag binding must match current binding")
+        if (
+            self.tag_binding.state == "moved"
+            and self.tag_binding.previous_tag_ref_sha == self.selector.tag_ref_sha
+            and self.tag_binding.previous_resolved_sha == self.resolved_sha
+        ):
+            raise ValueError("moved tag binding must differ from current binding")
         return self
 
 

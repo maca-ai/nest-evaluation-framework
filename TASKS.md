@@ -10,7 +10,7 @@ Rules: take the top unchecked Pending task whose dependencies are met. One task 
 
 ## In progress
 
-- [ ] **NEF-T003 Contracts and deep campaign interface.** In progress on `feat/NEF-T003-contracts-and-campaign-seam`: immutable target/run/campaign/case/finding/evidence contracts, frozen 2.0.0 target-contract semantic invariants, generated-schema conformance, canonical JSON/digests, constitution-ordered aggregation, the single Campaign seam, deterministic fake, argparse CLI, and shared sabotage/conformance suite.
+- [ ] **NEF-T003 Contracts and deep campaign interface.** In progress on `feat/NEF-T003-contracts-and-campaign-seam`: immutable target/run/campaign/case/finding/evidence contracts, frozen 2.0.0 target-contract semantic invariants including intra-object tag-binding label coherence, generated-schema conformance, canonical JSON/digests, constitution-ordered aggregation, the single Campaign seam, deterministic fake, argparse CLI, and shared sabotage/conformance suite.
 
 ## Pending - v1 goal
 
