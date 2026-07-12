@@ -228,7 +228,7 @@ def test_verify_refuses_a_symlinked_blob(tmp_path: Path) -> None:
         ("raw/.env.production", {"safe": True}),
         ("raw/credentials.json", {"safe": True}),
         ("raw/result.json", {"private_key": "synthetic-but-forbidden"}),
-        ("raw/result.json", {"text": "-----BEGIN PRIVATE KEY-----"}),
+        ("raw/result.json", {"text": "-----" + "BEGIN PRIVATE KEY-----"}),
         ("raw/result.json", {"token": "ghp_" + "a" * 32}),
     ],
 )
