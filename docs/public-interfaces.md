@@ -35,6 +35,11 @@ Describes one immutable pin decision and its observed exact result:
 
 Gate selectors record `gate_tag` plus `tag_ref_sha`. Provisional selectors record `pinned_sha` plus explicit acknowledgement. Branches, `HEAD`, aliases, and other mutable refs cannot validate. `resolved_sha == peel(tag_ref_sha)` is a semantic invariant; peeling a lightweight tag is identity. A provisional `pinned_sha` must equal `resolved_sha`.
 
+Contract-code validation always enforces provisional equality. Lightweight gate tags validate by
+identity; annotated gate tags require an already verified `tag_ref_sha -> peeled SHA` binding in
+the validation context. Missing or contradictory peel evidence is rejected. This layer never
+queries Git or the network; NEF-T005 owns live resolution and supplies the verified binding.
+
 ## TargetSnapshotManifest
 
 Proves which target and environment were inspected:
@@ -76,6 +81,8 @@ Contains:
 
 The workspace must resolve beneath the NEF-owned disposable target root.
 CampaignRequest 2.0.0 embeds TargetSnapshotManifest 2.0.0 and rejects `tag_binding.state=moved`.
+It also verifies the embedded manifest digests, target/protocol agreement, canonical run identity,
+campaign availability, and workspace/target coherence before execution.
 
 ## CampaignResult
 
@@ -90,6 +97,23 @@ Contains:
 - evidence-manifest digest
 
 A `pass` requires an evidence-manifest digest and complete required cases. The aggregator revalidates this invariant rather than trusting the producer.
+
+Aggregation preserves the six states and applies the constitution ordering: harness `error`, then
+product `fail`, then required incompleteness (`inconclusive`, `invalid`, `skipped`, or missing),
+then `pass` only when every required campaign passes. Optional skips do not falsify a complete set
+of required passes.
+
+## Read-only CLI
+
+`python -m nef` exposes three dependency-free argparse commands:
+
+- `validate CONTRACT PATH [--peel-binding TAG_REF_SHA=PEELED_SHA]`
+- `schema CONTRACT`
+- `aggregate PATH --required CAMPAIGN_ID [--required CAMPAIGN_ID ...]`
+
+Successful output is canonical sorted-key UTF-8 JSON. Validation failures return nonzero and write
+an error to stderr. `--peel-binding` carries previously verified annotated-tag evidence; it is not
+a live resolver.
 
 ## EvidenceManifest
 
@@ -113,4 +137,4 @@ It records actor, rationale, time, finding fingerprint, and evidence/run referen
 
 ## Schema evolution
 
-T003 generates Pydantic JSON Schemas that must conform semantically to these normative schemas. Ordering of `$defs` or descriptions is not semantic; field names, types, requiredness, enums, formats, and closed-object behavior are. A breaking change requires Matthias, a schema-version change, cross-artifact analysis, and a new NEF protocol digest when behavior changes. Per-object versions may differ; consumers must honor the embedded object's version.
+T003 generates Pydantic JSON Schemas that must conform semantically to these normative schemas. Ordering of `$defs` or descriptions is not semantic; field names, types, requiredness, enums, formats, and closed-object behavior are. JSON Schema validity does not prove cross-field equality or Git peeling; contract-code validation supplies those semantic checks. A breaking change requires Matthias, a schema-version change, cross-artifact analysis, and a new NEF protocol digest when behavior changes. Per-object versions may differ; consumers must honor the embedded object's version.
