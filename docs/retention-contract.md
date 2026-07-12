@@ -37,10 +37,22 @@ Missing blob, digest mismatch, truncation, malformed manifest, duplicate conflic
 - Each publication uses idempotent paths derived from run identity and digest.
 - Administrators or hosting-platform compromise can still rewrite or delete history; NEF states this limitation in reports.
 
+The versioned local/branch tree is defined in `docs/evidence-layout.md`. NEF-T004 creates only the
+local canonical files; NEF-T005 owns Git publication and protection.
+
 ## Privacy and exclusions
 
 Evidence excludes credentials, environment files, production signing keys, signing seeds, customer data, customer evidence, and production traffic. Model inputs are allowlisted, size-bounded, and secret-scanned. Synthetic fixtures are clearly marked.
 
+The local store rejects detectable forbidden paths, sensitive field names, private-key headers,
+and GitHub-token shapes on write and verification. Pattern detection is not proof that arbitrary
+content contains no customer data or unknown credential form; the producer allowlist remains a
+required trust boundary.
+
 ## Verification obligation
 
 An offline verifier must be able to validate a bundle using committed schemas and public metadata without executing target code or contacting a model provider. A scorecard or report with missing evidence is incomplete, never green.
+
+`python -m nef verify STORE_ROOT MANIFEST_DIGEST` implements this local, network-free check. It
+accepts only a canonical manifest created after its retention metadata and referenced blobs, and
+returns nonzero for missing, malformed, non-canonical, or digest-inconsistent evidence.

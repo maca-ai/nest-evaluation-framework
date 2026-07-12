@@ -17,6 +17,7 @@ from nef.contracts import (
     validate_contract,
 )
 from nef.engine import aggregate_campaigns
+from nef.evidence import EvidenceError, EvidenceStore
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -40,6 +41,10 @@ def _parser() -> argparse.ArgumentParser:
     aggregate = commands.add_parser("aggregate", help="aggregate campaign result JSON")
     aggregate.add_argument("path", type=Path)
     aggregate.add_argument("--required", action="append", required=True, metavar="CAMPAIGN_ID")
+
+    verify = commands.add_parser("verify", help="verify one sealed local evidence bundle")
+    verify.add_argument("store_root", type=Path)
+    verify.add_argument("manifest_digest")
     return parser
 
 
@@ -86,9 +91,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             output: object = contract
         elif args.command == "schema":
             output = generated_schema(args.contract)
-        else:
+        elif args.command == "aggregate":
             output = aggregate_campaigns(_results(_read_json(args.path)), args.required)
-    except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        else:
+            output = EvidenceStore(args.store_root).verify(args.manifest_digest).summary()
+    except (EvidenceError, OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
         sys.stderr.write(f"error: {exc}\n")
         return 1
     sys.stdout.write(canonical_json_text(output) + "\n")
