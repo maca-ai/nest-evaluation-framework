@@ -329,3 +329,19 @@ Consulted target paths, in orientation order: `AGENTS.md`; `PRD.md`; `PLANNING.m
 - CI/review: not started because no pull request exists; NEF-T002 has not yet created the CI scaffold.
 - Task status: NEF-T001 remains In progress despite complete local acceptance because Matthias requires a draft PR at the task checkpoint.
 - Smallest next action: Matthias creates or explicitly authorizes creation of a legitimate `main` base branch, then directs how the already-pushed root task commit should be related to that base without force-push, history rewrite, or a direct task commit to `main`. After that external decision, update/open the draft PR and wait for CI/review. Do not start NEF-T002 meanwhile.
+
+## 2026-07-11 - NEF-T001 authorized repository-genesis disposition
+
+**Disposition:** Matthias explicitly ruled that NEF-T001 is the repository genesis. Root commit `aebd2b151dfb1252dd4c952d74dc8256b1975c5d` necessarily created the seven-file control scaffold and the T001 specification artifacts together because no earlier baseline exists. A synthetic scaffold commit or replacement branch would manufacture a review diff and is prohibited.
+
+**Genesis exception:** Matthias authorized one additive direct creation of `refs/heads/main` from the tip of `docs/NEF-T001-specifications`. This dated exception overrides the normal no-direct-push rule for that single genesis push only. It does not authorize a force-push, history rewrite, self-merge, credential handling, or any later direct push to `main`.
+
+**Supersession:** This disposition supersedes the preceding `blocked / awaiting PR checkpoint` status. NEF-T001 is complete as the authorized bootstrap genesis. The lack of a T001 pull-request diff is intrinsic to the repository's creation, not a waiver for subsequent work.
+
+**Mandatory discipline from NEF-T002 onward:** Every task branches from `main`, produces a real reviewable diff, passes proportionate local verification and required GitHub CI/spec-blind review, creates a recoverable pushed checkpoint and draft pull request targeting `main`, and waits at applicable approval/merge boundaries. No later task may rely on the genesis exception.
+
+**Genesis checkpoint method:** Commit this disposition on `docs/NEF-T001-specifications`, push that exact branch tip additively to `refs/heads/main`, set the GitHub default branch to `main`, and verify the remote ref. If GitHub branch protection rejects creation, stop without workaround. The exact resulting main SHA and remote verification evidence will be appended from the first normal task branch because a Git commit cannot record its own SHA in its own contents.
+
+**Target context:** NEST target SHA remains `de8c0772dcb1890bfbf7c2c449a4252f63e0807a`; integrity-protocol digest remains `a41f9890187c18153890645f1a3cf7fc038e25e3f0ed13fcbde06f9abda80e40`. The target capability manifest remains current: T-014 and T-015 available; T-016 and Ed25519 explicit `skipped/unavailable` cases.
+
+**Exact next action:** verify and commit only `TASKS.md` and `SESSION_LOG.md` on `docs/NEF-T001-specifications`, push the task branch checkpoint, then create `main` at that same exact tip under the one-time authorization.

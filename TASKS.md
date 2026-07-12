@@ -5,10 +5,11 @@ Rules: take the top unchecked Pending task whose dependencies are met. One task 
 ## Done
 
 - [x] NEF-T000 Control package audited and hardened (2026-07-11): advisory daily evaluator, exact-SHA target contract, five campaign classes, evidence-first ordering, secure job separation, bounded goal autonomy, and restart-safe kickoff package approved.
+- [x] NEF-T001 Constitution and executable specifications (2026-07-11): completed as the explicitly authorized repository genesis; constitution, executable specifications, normative schemas, target capability profile, and cross-artifact analysis landed together because no pre-T001 baseline existed. Branch, draft-PR, CI, and review discipline is mandatory from NEF-T002 onward.
 
 ## In progress
 
-- [ ] **NEF-T001 Constitution and executable specifications.** Implementation and local acceptance verification complete 2026-07-11 on `docs/NEF-T001-specifications`; zero unresolved critical inconsistencies. Task remains In progress until the recoverable branch is pushed and a draft PR targeting `main` exists. The approved remote currently has no refs/default branch.
+- None.
 
 ## Pending - v1 goal
 
