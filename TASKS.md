@@ -9,7 +9,7 @@ Rules: take the top unchecked Pending task whose dependencies are met. One task 
 
 ## In progress
 
-- [ ] **NEF-T002 Reproducible scaffold and trusted CI.** Implementation, local verification, and local checkpoint commits complete on `feat/NEF-T002-reproducible-scaffold`; push, draft PR, GitHub CI/review, and merge approval remain. Scope: Python 3.12/uv lock, module skeleton, deterministic quality/security CI, trusted-base advisory Anthropic spec-blind reviewer, RFC 8032 known-answer coverage, constitution 1.1.0 plus target-pinning contract 2.0.0 amendment, Draft 2020-12 immutable-target vectors, and m0 gate/provisional target profiles.
+- [ ] **NEF-T002 Reproducible scaffold and trusted CI.** Implementation checkpoint pushed on `feat/NEF-T002-reproducible-scaffold`; draft PR #1 is open and deterministic GitHub CI passed at implementation tip `d2d1a2305497a366f7072fa95fe6f90ab0978ae0`. Final record-commit CI, review/approval, and merge remain. Scope: Python 3.12/uv lock, module skeleton, deterministic quality/security CI, trusted-base advisory Anthropic spec-blind reviewer, RFC 8032 known-answer coverage, constitution 1.1.0 plus target-pinning contract 2.0.0 amendment, Draft 2020-12 immutable-target vectors, and m0 gate/provisional target profiles.
 
 ## Pending - v1 goal
 
