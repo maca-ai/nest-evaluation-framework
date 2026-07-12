@@ -45,3 +45,16 @@ No pricing, model snapshot, mutation-tool selection, or repository retention set
 | https://github.com/maca-ai/nest.git | 2026-07-12 | Read-only tag enumeration returned only annotated `m0`: ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled commit `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; `m1` was absent. | Default gate target is m0. Post-m0 work requires explicit provisional SHA mode; no moving-main selection or fallback. |
 
 Target-tag observations are point-in-time evidence and are rechecked at pin time. No claim that GitHub prevents tag movement is made; NEF compares bindings against retained validated snapshots.
+
+## 2026-07-12 - NEF-T003
+
+| Source | Retrieved | Supported claim | Disposition |
+|---|---|---|---|
+| https://pypi.org/project/pydantic/ | 2026-07-12 | PyPI verified Pydantic 2.13.4 as the current stable release and published provenance/hashes for that release. | Keep the existing exact `pydantic==2.13.4` pin and lock; no dependency or lock change is needed for T003. |
+| https://pydantic.dev/docs/validation/latest/concepts/models/ | 2026-07-12 | `ConfigDict(frozen=True)` rejects model attribute reassignment but nested mutable values remain mutable. | Use frozen/forbid-extra models plus internal recursive container freezing and test deep immutability through the public contract interface. |
+| https://pydantic.dev/docs/validation/latest/concepts/validators/ | 2026-07-12 | Whole-model validators enforce constraints that depend on multiple validated fields. | Enforce selector/SHA coherence, moved-binding refusal, manifest equality, and result state/evidence invariants in model validators without changing frozen JSON Schemas. |
+| https://pydantic.dev/docs/validation/latest/concepts/json_schema/ | 2026-07-12 | `model_json_schema()` produces JSON Schema Draft 2020-12-compatible dictionaries and supports validation-mode generation. | Expose deterministic generated validation schemas and prove semantic conformance against the eight frozen normative schemas. |
+| https://docs.python.org/3.12/library/argparse.html | 2026-07-12 | Python 3.12.13 provides `ArgumentParser`, required subcommands/options, type conversion, generated help, and deterministic invalid-argument exits. | Implement the T003 CLI with standard-library argparse only; add no CLI dependency. |
+| https://github.com/maca-ai/nest.git | 2026-07-12 | Live read-only tag enumeration returned only annotated `m0`: tag ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled commit `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; no `m1` ref exists. | Pin T003 orientation to unchanged m0 gate evidence. Do not select newer work or provisional mode. |
+
+No T003 decision requires a new dependency, schema version, protocol, target baseline, provider, or service.

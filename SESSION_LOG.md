@@ -650,3 +650,187 @@ The spec-blind workflow did not run, matching the recorded bootstrap limitation:
 **Remote review-fix checkpoint:** Commit `f2c1bb36c382d1fb0400a892073910479b1f4d21` pushed additively to `origin/feat/NEF-T002-reproducible-scaffold`; read-only `git ls-remote` returned the identical SHA. Draft PR #1 remains OPEN/DRAFT with exact head OID `f2c1bb36c382d1fb0400a892073910479b1f4d21`. GitHub CI `verify` passed in 21 seconds at `https://github.com/maca-ai/nest-evaluation-framework/actions/runs/29192596500/job/86649773985`. No review decision or merge occurred.
 
 **Checkpoint boundary:** Push this append-only evidence record, verify the final remote tip and its CI, then return PR #1 to Matthias for disposition of the two completed cross-vendor review fixes. Keep the PR draft; do not merge or begin T003.
+
+## 2026-07-12 - NEF-T003 orientation and decision-complete plan
+
+**Project / task / execution mode:** NEF, NEF-T003 Contracts and deep campaign interface, active goal mode. PR #1 is authoritatively MERGED at `c745885070ca2b2644ffdd35b9cf43e632fac4b7`; all T002 commits including `f2c1bb3` and `8f1475d` are ancestors of the merge. Fresh local `main` matched `origin/main` at that merge before branch `feat/NEF-T003-contracts-and-campaign-seam` was created. The worktree was clean. T002 is Done; T003 is the top eligible and only In-progress task.
+
+**Live target pin:** At `2026-07-12T13:05:01Z`, read-only tag enumeration of `https://github.com/maca-ai/nest.git` returned only annotated `m0`; `m1` does not exist. Tag ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a` still peels to `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`, matching the retained first-seen binding. The existing disposable checkout is detached and clean at that exact commit/tree `77ccd2fc1a41dd365a3b3b98508bb0534b56c95f`. No NEST test/campaign ran and no NEST file was written. Gate mode remains `gate-evidence` / `reproducible-baseline`; no provisional selection or fallback occurred.
+
+### TargetDescriptor 2.0.0 - T003 orientation
+
+```yaml
+schema_version: 2.0.0
+repository_url: https://github.com/maca-ai/nest.git
+target_mode: gate-evidence
+selector:
+  kind: gate-tag
+  gate_tag: m0
+  tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+observed_at: 2026-07-12T13:05:01Z
+source_kind: remote
+```
+
+### TargetSnapshotManifest 2.0.0 - T003 orientation
+
+```yaml
+schema_version: 2.0.0
+repository_url: https://github.com/maca-ai/nest.git
+target_mode: gate-evidence
+selector:
+  kind: gate-tag
+  gate_tag: m0
+  tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+evidence_class: gate-evidence
+baseline_reproducibility: reproducible-baseline
+tag_binding:
+  state: unchanged
+  previous_snapshot_manifest_digest: bf32a2cffd47b317eb521200b4c91596f8cc773db986cef7197603e63fd40328
+  previous_tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+  previous_resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+dirty: false
+nef_sha: c745885070ca2b2644ffdd35b9cf43e632fac4b7
+lock_digest: 9f5e25f611865b3e37951b5975c27af4ed1229a1610f7bff00418aa56059e853
+constitution_version: 1.3.0
+constitution_digest: 6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a
+protocol_digest: e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714
+relevant_source_digests:
+  docs/DECISIONS-2026-07-06-REDTEAM.md: 55e61cb1b5a87e4ccd151828cb7bd2416b3f14009470402e3364b31bb6a92a91
+  specs/.specify/memory/constitution.md: 6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a
+  specs/001-core-pipeline/spec.md: 1a095743c37a0c3de7a3db36e9a0e8137aac8c92e7bb73096d0a5421a9d501f1
+environment_fingerprint:
+  digest: 1969aad71703957a6ea6e92f4a01ead19a8d625377011e404a69d7d94ddef921
+  runner: local-codex
+  operating_system: macOS 14.6 build 23G80
+  architecture: arm64
+  locale: C.UTF-8 (host fallback C)
+  timezone: Europe/Vienna
+  tool_versions:
+    python: 3.12.13
+    uv: 0.11.21
+consulted_paths:
+  - AGENTS.md
+  - PRD.md
+  - PLANNING.md
+  - TASKS.md
+  - SESSION_LOG.md
+  - specs/.specify/memory/constitution.md
+  - specs/HANDOFF.md
+  - specs/001-core-pipeline/spec.md
+  - specs/004-replay-eval-harness/spec.md
+  - docs/DECISIONS-2026-07-06-BUILD-AUDIT.md
+  - docs/DECISIONS-2026-07-06-REDTEAM.md
+  - packages/nest-core/README.md
+  - packages/nest-core/pyproject.toml
+  - packages/nest-core/src/nest_core/__init__.py
+  - packages/nest-core/tests/test_smoke.py
+  - pyproject.toml
+  - uv.lock
+observed_at: 2026-07-12T13:05:01Z
+```
+
+The prior first-seen snapshot was re-parsed from its append-only journal YAML, validated against the frozen TargetSnapshotManifest 2.0.0 schema, canonicalized as UTF-8 sorted-key compact JSON with floats forbidden, and hashed to `bf32a2cffd47b317eb521200b4c91596f8cc773db986cef7197603e63fd40328`. That digest supplies the unchanged binding reference above. The m0 TargetCapabilityManifest remains current: only `target-binding` is required/available; global-chain, T-014, T-015, T-016, and Ed25519 campaigns remain reasoned unavailable skips at m0. NEST protocol digest remains `e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714`.
+
+**Refreshed primary evidence:** Official PyPI confirms Pydantic 2.13.4 remains stable/current. Official Pydantic docs confirm frozen models, whole-model validators, and Draft 2020-12 validation-schema generation; they also warn that frozen models alone do not freeze nested mutable values. Python 3.12.13 argparse docs confirm the approved dependency-free CLI mechanism. Exact URLs, retrieval date, supported claims, and dispositions are recorded in `docs/research-register.md`. No dependency or lock change is required.
+
+**Deep-module design:** The only external execution seam remains `Campaign.execute(CampaignRequest) -> CampaignResult`. `nef.contracts` is the public contract interface; internal target/campaign/evidence/finding model modules hide validation, deep immutability, canonicalization, schema generation, and digest logic. `nef.engine` exposes constitution-ordered aggregation plus the Campaign protocol; `DeterministicFakeCampaign` is the first adapter and later campaign implementations provide real variation at the same seam. Tests cross public interfaces rather than internal helpers. Deleting these modules would redistribute validation/canonicalization/state logic across every campaign, so they provide leverage and locality rather than pass-through layers.
+
+**Target coherence seam:** Provisional contracts always enforce `selector.pinned_sha == resolved_sha`. Lightweight gate tags enforce identity when `tag_ref_sha == resolved_sha`. Annotated gate contracts require a caller-supplied, already verified peel binding in Pydantic validation context and reject missing/mismatched evidence. T003 performs no Git/network resolution; NEF-T005 pin-target owns live peeling and supplies that context. Nested CampaignRequest validation propagates the same context. This closes contract-layer coherence while preserving the frozen 2.0.0 schemas and T005 runtime ownership.
+
+**Exact files:** Create `src/nef/contracts/base.py`, `canonical.py`, `target.py`, `campaign.py`, `evidence.py`, `findings.py`, and `registry.py`; replace `src/nef/contracts/__init__.py`. Create `src/nef/engine/campaign.py`, `aggregation.py`, and `fake.py`; replace `src/nef/engine/__init__.py`. Create `src/nef/cli.py` and `src/nef/__main__.py`. Create `tests/contract_fixtures.py`, `tests/campaign_conformance.py`, `tests/test_contract_models.py`, `tests/test_schema_conformance.py`, `tests/test_aggregation.py`, `tests/test_campaign_interface.py`, and `tests/test_cli.py`. Update only `docs/public-interfaces.md`, `docs/trust-model.md`, `specs/002-target-integrity/spec.md`, `docs/research-register.md`, `TASKS.md`, and `SESSION_LOG.md` for implementation alignment and evidence. Frozen normative `*.schema.json`, dependencies, `uv.lock`, workflows, and unrelated files remain unchanged.
+
+**Public interfaces:** Export the eight contract models plus nested value models; `canonical_json_bytes`, `canonical_sha256`, `generated_schema`, and contract-registry validation; `Campaign` protocol; `aggregate_campaigns(results, required_campaign_ids) -> canonical state`; and `DeterministicFakeCampaign`. The argparse CLI exposes read-only `validate`, `schema`, and `aggregate` subcommands through `python -m nef`. No new public schema, service, store, resolver, or provider is introduced.
+
+**TDD sequence:** (1) tracer bullet: provisional mismatch is RED then minimally enforced; (2) lightweight identity and annotated peel-context success/missing/mismatch; (3) immutable/unknown-field/canonical/no-float behavior; (4) all eight models and generated-schema positive/negative conformance; (5) CampaignRequest moved/digest/target/protocol/workspace invariants; (6) CampaignResult pass/skipped/evidence/time invariants; (7) constitution aggregation order including empty/missing required campaigns; (8) deterministic fake through the Campaign interface and reusable conformance helper; (9) argparse validate/schema/aggregate flows. Run focused tests and strict mypy after each vertical slice.
+
+**Sabotage plan:** Mutate/remove each contract invariant in memory or through deliberately invalid public inputs and prove the suite fails/rejects: all six states remain distinct; `error` outranks `fail`; `fail` outranks required incomplete states; missing required campaigns cannot pass; pass without sealed evidence or case evidence is rejected; moved bindings cannot form CampaignRequest; provisional mismatch, missing annotated peel evidence, bad annotated peel, wrong manifest digest, target/protocol/workspace mismatch, floats, unknown fields, and mutable nested updates are rejected. The shared fake must emit every state and the conformance suite must detect a deliberately malformed adapter.
+
+**Verification:** Before each checkpoint run `uv sync --locked --all-groups`, Ruff format/check, strict mypy, full pytest, import-linter, and Bandit; additionally run focused tests during TDD, Draft 2020-12 metaschema validation, semantic corpus comparison against all frozen normative schemas, generated-schema determinism, canonical byte/digest replay, CLI subprocess smoke tests, schema-file no-diff, CLAUDE invariant, gitleaks, staged diff, and complete branch diff review. Push only the task branch, verify exact remote SHA, keep the PR draft, and stop at CI/review/merge boundaries.
+
+**Risks / hard-stop audit / scope expansions:** Risks are accidental schema drift, shallow mutability, Pydantic coercion, context-free annotated-tag acceptance, state collapse, nondeterministic serialization, false schema-equivalence claims, and overbuilding T005/T004 responsibilities. Mitigations are strict frozen models with recursive freezing, public-interface tests, schema no-diff checks, explicit peel context, deterministic canonical helpers, and exact task routing. No new dependency, schema, protocol, baseline, threshold, hosted product, service, provider, secret, customer data, production key, NEST write, live resolver, evidence store, publisher, or external mutation is planned. Housekeeping and primary-evidence refresh are required scope, not expansions. Any discovered need to edit a frozen schema or dependency is a hard stop.
+
+**Exact next action:** Run the unchanged full local gate, checkpoint only this orientation/housekeeping/evidence plan on the T003 branch, push it, open draft PR #2 against `main`, verify remote/local SHA equality and CI, then begin the approved TDD tracer bullet without changing schemas or dependencies.
+
+### NEF-T003 implementation checkpoint
+
+**Task / milestone / branch:** NEF-T003, pre-M1 implementation checkpoint, `feat/NEF-T003-contracts-and-campaign-seam`. Draft PR #2 remains the only delivery path and targets `main`; T003 remains In progress pending CI, review, approval, and merge. No direct-main action occurred.
+
+**Files changed:** Added `src/nef/contracts/{base,canonical,target,campaign,evidence,findings,registry}.py`, `src/nef/engine/{campaign,aggregation,fake}.py`, `src/nef/{cli,__main__}.py`, `tests/{contract_fixtures,campaign_conformance,test_contract_models,test_schema_conformance,test_aggregation,test_campaign_interface,test_cli}.py`; updated the two package exports, `docs/public-interfaces.md`, `docs/trust-model.md`, `specs/002-target-integrity/spec.md`, and this journal. The already-pushed orientation commit contains the required `TASKS.md` and `docs/research-register.md` updates. Frozen normative schemas, dependencies, `uv.lock`, workflows, and CLAUDE control content are unchanged.
+
+**Implemented contracts and decisions:** Eight closed, frozen Pydantic contract roots now cover target descriptor/snapshot/capability, campaign request/result/case, evidence, finding, and disposition data. Nested mappings/sequences are recursively frozen. Canonical serialization is compact sorted-key UTF-8 JSON with SHA-256 helpers and an explicit float ban; Decimal values remain strings. Contract-code validation closes the T002 selector-coherence residual: provisional pins require `pinned_sha == resolved_sha`; lightweight tags use identity peeling; annotated tags require caller-supplied verified peel evidence and reject missing or contradictory bindings. No Git/network resolver was added. CampaignRequest rejects moved bindings, wrong embedded digests, target/protocol/run/workspace/capability mismatches, and retains the frozen 2.0.0 schemas unchanged.
+
+`Campaign.execute(CampaignRequest) -> CampaignResult` is the single runtime protocol. The deterministic fake emits all six exact states without collapse and is exercised by a reusable adapter conformance helper. Aggregation implements `error > fail > required incomplete/missing > pass`; empty required sets are invalid and optional skips do not falsify complete required passes. The read-only argparse CLI exposes canonical `validate`, `schema`, and `aggregate` commands. Generated Draft 2020-12 schemas are deterministic and preserve normative closed/required, unique-array, nonempty-key, and schema-expressible conditional behavior; model code intentionally remains stricter for cross-field invariants JSON Schema cannot express.
+
+**TDD and sabotage evidence:** Each vertical slice began red (missing modules or unenforced invariants) and was made green minimally. Public invalid-input tests cover both provisional equality layers, annotated/lightweight peeling, moved binding, target/protocol/digest/run/workspace/capability mismatches, pass and case evidence, reversed time, skipped reasons, floats, unknown fields, nested mutation, unsafe evidence paths, unstable finding fingerprints, duplicate arrays, conditional fields, and all six non-pass states. The shared conformance suite detects a deliberately identity-drifting adapter. An isolated copy under `/tmp` then disabled both provisional equality checks, moved-binding refusal, pass-manifest enforcement, and error precedence. The focused suite produced five expected failures (`DID NOT RAISE`/wrong state or error), exit 1, while repository source remained untouched: sabotage proof PASS.
+
+**Verification results:**
+
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups` - PASS; 67 packages resolved and 65 checked, no lock drift.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked ruff format --check .` - PASS; 31 files already formatted.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked ruff check .` - PASS.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked mypy --strict src tests scripts` - PASS; zero issues in 31 source files.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked pytest` - PASS; 79 tests, up from 38 at T003 start (+41).
+- `PYTHONPATH=src UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked lint-imports` - PASS; 19 files/27 dependencies, contract boundary kept.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked bandit -q -r src scripts` - PASS.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv export --locked --no-dev --no-emit-project --format requirements.txt --output-file /tmp/nef-t003-requirements.txt` - PASS.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked pip-audit --disable-pip --require-hashes --requirement /tmp/nef-t003-requirements.txt` - the sandboxed attempt could not resolve PyPI; the authorized network retry PASSed with no known vulnerabilities.
+- `PYTHONPATH=src UV_CACHE_DIR=/tmp/nef-uv-cache uv run --offline --locked python -m nef schema campaign-result | UV_CACHE_DIR=/tmp/nef-uv-cache uv run --offline --locked python -m json.tool` - PASS; CLI subprocess emitted valid JSON.
+- Isolated four-mechanism source mutation against focused tests - PASS; five expected test failures, sabotage pytest exit 1.
+- `git diff --check` - PASS; CLAUDE invariant PASS; frozen-schema diff empty; dependency/lock diff empty.
+
+**Protocol and target evidence:** The unchanged NEST gate target is annotated `m0`, tag ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled target SHA `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; target protocol digest remains `e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714`, and the m0 capability manifest remains current. The NEF protocol digest over the established 14-file input set is now `1e3a6d914ebf42ce5416dfc185e81b8aaa7cd335f3332d812eed87e61fd5eb09`; only spec-002 (`60aca8ee63220580be81a7dbadae77251a89a04a4d1f71f1ebcefb3ef76de745`), public interfaces (`ee3392561f3940d4875d2dcfaae87c9d6cd660bb9c6b14977a750585108a9836`), and trust model (`a7183fd90d7c38a04e93eb14be1e5fd026e5c37896592e749d3acf159f06b3c5`) changed; all eight normative schema digests remain unchanged.
+
+**Risks, limitations, and hard-stop audit:** Live Git peeling/acquisition and moved-binding comparison remain NEF-T005; append-only/hash-chained binding-history durability remains the T004/T005 seam. Schema validity alone still cannot prove instance-field equality or Git peeling; validated contract code supplies current semantic enforcement. A local gitleaks executable is unavailable, so the pinned CI secret scan remains mandatory before review. No dependency, frozen schema, protocol shape, threshold, baseline, service, provider, secret, signing key, customer data, NEST source, live resolver, evidence store, or external policy changed. No hard stop was encountered.
+
+**Exact next action:** Re-run the full local gate after this journal append, stage and inspect the intended 24-file implementation diff plus the complete branch diff, commit with the required NEF-T003 Conventional Commit body, push only the current feature branch, verify exact local/remote SHA equality, update draft PR #2, and require all GitHub checks including gitleaks to pass. Do not merge or begin NEF-T004.
+
+**Implementation remote checkpoint:** Commit `2b8829cafbd4e5385c81675a83076daa1f7c90eb` pushed additively to `origin/feat/NEF-T003-contracts-and-campaign-seam`; `git ls-remote` returned the identical SHA. Draft PR #2 remains OPEN/DRAFT at `https://github.com/maca-ai/nest-evaluation-framework/pull/2`, base `main`, with the required summary/rationale/verification/risk/rollback/target notes. GitHub CI `verify` passed at the implementation tip, including its pinned gitleaks scan, at `https://github.com/maca-ai/nest-evaluation-framework/actions/runs/29194964575/job/86656195351`. No reviews or merge occurred.
+
+**Record-checkpoint boundary:** Commit and push this append-only remote evidence on the same branch, verify final local/remote SHA equality, and require CI green at that final tip. Keep PR #2 draft and stop for independent review/Matthias disposition; do not merge, mark T003 Done, or begin T004.
+
+## 2026-07-12 - NEF-T003 cross-vendor binding-label review fix plan
+
+**Authority / task / state:** Matthias supplied one verified SEV-3 cross-vendor finding and authorized only its minimal fix on existing branch `feat/NEF-T003-contracts-and-campaign-seam`, draft PR #2, starting at clean HEAD `d26a6498f2d6f49f852f70af9399af90b40d910d`. NEF-T003 remains the only In-progress task in active goal mode. GitHub's thread-aware PR read contains no native comments, reviews, or threads; the supplied finding is the sole actionable item.
+
+**Finding and seam:** `TagBinding` validates whether prior fields are structurally present, but cannot compare them with current selector/snapshot values. `TargetSnapshotManifest._validate_snapshot_coherence` is the deep module seam that sees both pairs. It will require `unchanged` to mean exact prior/current pair equality and `moved` to mean at least one pair member differs. `first-seen` remains governed by `TagBinding`. This closes only intra-object label coherence; it does not authenticate the label or compare stored prior snapshots, which remain NEF-T005 pin-target responsibilities.
+
+**Exact files and interfaces:** Modify `src/nef/contracts/target.py`, `tests/test_contract_models.py`, `specs/002-target-integrity/spec.md`, `docs/trust-model.md`, `TASKS.md`, and this append-only `SESSION_LOG.md`. No public field, method, schema version, normative `*.schema.json`, dependency, lockfile, workflow, target profile, or campaign interface changes.
+
+**TDD sequence and acceptance:** Add one public-interface snapshot test for mislabeled `unchanged`; prove RED, add the minimal snapshot validator, prove GREEN. Then add the executable CampaignRequest regression, incoherent `moved` rejection, coherent `unchanged` executable acceptance, and coherent `moved` violation-evidence acceptance plus request refusal, running focused tests after each behavior. Error messages stay in existing style. Update spec/trust wording only after behavior is green.
+
+**Sabotage / verification:** In an isolated `/tmp` source copy, disable only the new binding-label coherence conditions and require the new tests to fail while repository source remains unchanged. Before checkpoint run `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups`, Ruff format/check, strict mypy, full pytest, import-linter, and Bandit; also require focused RED/GREEN evidence, schema/dependency/lock no-diff, CLAUDE invariant, `git diff --check`, staged diff, complete PR diff, exact remote SHA, draft PR state, and green CI/gitleaks.
+
+**Risks / hard-stop audit:** Primary risks are overclaiming comparison against retained history, accidentally rejecting coherent first-seen evidence, or modifying frozen schemas. Tests separate structural history, local pair coherence, and executable refusal. True prior-history verification remains explicit. No dependency, frozen schema, protocol shape, baseline, threshold, provider, service, secret, NEST write, live resolver, or external policy change is needed; no hard stop applies.
+
+**Exact next action:** Add the single mislabeled-`unchanged` snapshot test and demonstrate RED before changing contract implementation.
+
+### NEF-T003 binding-label review-fix checkpoint
+
+**Files changed:** `src/nef/contracts/target.py`, `tests/test_contract_models.py`, `specs/002-target-integrity/spec.md`, `docs/trust-model.md`, `TASKS.md`, and `SESSION_LOG.md` only. Normative schemas, generated-schema contracts, dependencies, `uv.lock`, workflows, public fields, and other implementation modules are unchanged.
+
+**Behavior and scope:** Gate snapshot validation now cross-checks `tag_binding.state` against the previous/current SHA pairs carried by that same object. `unchanged` requires equality of both tag-ref and resolved SHAs; `moved` requires at least one difference; `first-seen` retains its existing structural rule. Nested CampaignRequest validation therefore rejects a mislabeled moved tag before it can bypass the existing `state == moved` execution refusal. Coherent unchanged snapshots remain executable, and coherent moved snapshots remain valid violation evidence but cannot form executable requests. This does not authenticate the supplied prior pair or compare retained history; NEF-T005 pin-target still owns that external comparison.
+
+**TDD and sabotage proof:** The first mislabeled-`unchanged` snapshot probe was RED with `DID NOT RAISE`; the minimal equality validator made it GREEN. The inverse same-pair `moved` probe was independently RED with `DID NOT RAISE`; the minimal inequality validator made it GREEN. Three further public-interface cases cover the CampaignRequest bypass and both coherent preservation paths. In an isolated `/tmp` copy, replacing only the new `unchanged` and `moved` condition predicates with `False` caused exactly three expected failures: snapshot mislabeled unchanged, executable-input bypass, and incoherent moved. The coherent unchanged/moved preservation tests remained green. Sabotage pytest exit 1: PASS.
+
+**Verification results:**
+
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --locked --all-groups` - PASS; 67 packages resolved and 65 checked.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked ruff format --check .` - PASS; 31 files already formatted.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked ruff check .` - PASS.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked mypy --strict src tests scripts` - PASS; zero issues in 31 files.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked pytest` - PASS; 84 tests, up from 79 (+5).
+- `PYTHONPATH=src UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked lint-imports` - PASS; 19 files/27 dependencies, contract boundary kept.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --locked bandit -q -r src scripts` - PASS.
+- Focused five-case review suite - PASS; all acceptance cases green.
+- Isolated binding-label mutation - PASS; three expected failures and two coherent-case passes, sabotage exit 1.
+- `git diff --check` - PASS; CLAUDE invariant PASS; frozen-schema diff empty; dependency/lock diff empty.
+
+**Target / protocol evidence:** This review fix makes no new target-specific decision. The current NEST target remains annotated m0, tag ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled SHA `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`, target protocol digest `e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714`; its capability manifest remains current. The established 14-file NEF protocol digest is now `e013c237b8b39213dd776ae971b22bbb43e2de275697d4aae99a9f9deecc4a72`, reflecting only spec-002 (`782a00341adf63a230495bc0bdb2f0bda7e55cef06b2f5eb2ccedb43f44b94d1`) and trust-model (`c58d63e040865bc7ae85bc01a1495f1ba0c8d392588a360f8745f9cd473ba58c`) wording changes among protocol inputs; all schema digests are unchanged.
+
+**Risks / hard-stop audit / next action:** The label and previous pair remain only as trustworthy as the future pin-target producer; prior-history deletion remains an explicit limitation. No frozen schema, dependency, protocol shape, baseline, threshold, provider, service, secret, target source, live resolver, or external policy changed, so no hard stop was encountered. Re-run the full local gate after this journal append, review the six-file staged and complete PR diffs, commit and push additively to the same branch, verify exact remote SHA, update draft PR #2, require green CI/gitleaks, and stop for independent review. Do not resolve/reply to nonexistent GitHub threads, merge, or begin NEF-T004.
+
+**Review-fix remote checkpoint:** Commit `226910444fb196865f2618754216c5e12cb28715` pushed additively to `origin/feat/NEF-T003-contracts-and-campaign-seam`; read-only remote verification returned the identical SHA. Draft PR #2 remains OPEN/DRAFT at `https://github.com/maca-ai/nest-evaluation-framework/pull/2` with the updated fix, 84-test result, sabotage proof, protocol digest, and narrowed prior-history claim. GitHub CI `verify`, including pinned gitleaks, passed at `https://github.com/maca-ai/nest-evaluation-framework/actions/runs/29195791692/job/86658397407`. GitHub still reports no native reviews or review threads; no merge occurred.
+
+**Final record boundary:** Commit and push this append-only remote evidence on the same branch, verify final local/remote SHA equality and green CI at the record tip, then stop for cross-vendor re-review/Matthias disposition. Keep PR #2 draft; do not mark T003 Done or begin T004.
