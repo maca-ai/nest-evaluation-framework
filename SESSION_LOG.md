@@ -605,3 +605,44 @@ The optional original NEST checkout was rechecked read-only and had independentl
 The spec-blind workflow did not run, matching the recorded bootstrap limitation: GitHub cannot load the new `workflow_run` definition from a PR head before it exists on trusted `main`. No provider secret was configured or exposed, and no secret-bearing PR-head workaround was attempted. GitHub reports no reviews and no review decision. The PR remains draft and unmerged; milestone/task approval is still pending.
 
 **Exact next action after this record commit:** Push this append-only checkpoint record, verify final local/remote SHA equality, require CI green again at the final PR tip, then wait for Matthias's review/merge disposition. Do not merge, mark T002 Done, or begin T003.
+
+## 2026-07-12 - NEF-T002 cross-vendor GO-WITH-FIXES plan
+
+**Authority and task:** Matthias supplied the independent Claude review disposition `GO-WITH-FIXES` and authorized exactly two minimal fixes on the existing `feat/NEF-T002-reproducible-scaffold` branch. Draft PR #1 remains the checkpoint; no branch, rebase, schema change, or unrelated edit is authorized. The lightweight-tag peel fixture and prior-snapshot deletion residual were independently verified satisfied and remain unchanged.
+
+**Exact files:** Modify `tests/test_target_pinning_schemas.py`, `specs/002-target-integrity/spec.md`, `docs/trust-model.md`, and this append-only `SESSION_LOG.md` only. No `*.schema.json`, dependency, lockfile, workflow, public-interface, task-state, NEST, or other file may change.
+
+**Behavior and documentation:** Add four negative validation cases proving that `provisional_acknowledged: false` and an absent acknowledgement are rejected independently by TargetDescriptor 2.0.0 and TargetSnapshotManifest 2.0.0. Add the Draft 2020-12 cross-field limitation to NEF-002 edge cases and the trust-model honesty boundaries: schema validation alone cannot prove `selector.pinned_sha == resolved_sha` or `resolved_sha == peel(tag_ref_sha)`; enforcement remains explicitly owned by the NEF-T003 contract layer and NEF-T005 pin-target runtime.
+
+**Public interfaces and scope:** No schema or interface changes. The existing `const: true` plus required-field contract remains authoritative. Cross-field validation is deliberately not implemented in T002. This review fix adds regression evidence and normative honesty only; it makes no new NEST target-specific decision, so the current m0 snapshot/capability manifest remains applicable without repinning.
+
+**TDD and sabotage plan:** Add the descriptor false/absent rejection vector first and run the focused test. Add the snapshot false/absent vector and rerun. Prove sensitivity without editing a committed schema: load schemas in memory, recursively replace only the provisional acknowledgement `const: true` with `type: boolean`, validate the same four cases, and require the false cases to become accepted while the absent cases remain rejected by `required`. This demonstrates that the new suite detects weakening `const: true`; the ordinary focused suite must remain green against the untouched normative schemas.
+
+**Verification:** Run `uv sync --locked --all-groups`, `uv run --locked ruff format --check .`, `uv run --locked ruff check .`, `uv run --locked mypy --strict src tests scripts`, and `uv run --locked pytest`; additionally run the focused target-pinning tests, the in-memory sabotage proof, `git diff --check`, schema-file no-diff checks, exact changed-file review, CLAUDE invariant check, and committed-history secret scan. Review staged and complete PR diffs before checkpointing.
+
+**Risks and hard-stop audit:** Primary risks are vacuous negative tests, accidentally leaving a weakened schema, overstating Draft 2020-12 coherence, or touching review-clean artifacts. Mitigations are real `ValidationError` assertions at both layers, in-memory-only sabotage, explicit no-schema-diff verification, and exact file allowlisting. No frozen contract, protocol behavior, dependency, service, baseline, threshold, advisory policy, provider, secret, customer data, production key, NEST content, or external setting changes. The approved review fixes remain inside NEF-T002 and introduce no scope expansion.
+
+### NEF-T002 GO-WITH-FIXES verification and checkpoint record
+
+**Files changed:** `tests/test_target_pinning_schemas.py`, `specs/002-target-integrity/spec.md`, `docs/trust-model.md`, and `SESSION_LOG.md` only. All normative `*.schema.json` files, `TASKS.md`, dependencies, lockfile, workflows, source modules, and NEST inputs are unchanged.
+
+**Review fixes completed:** Added four parametrized negative vectors: false and absent provisional acknowledgement at both TargetDescriptor and TargetSnapshotManifest layers. Each validates through the real Draft 2020-12 registry and requires `jsonschema.exceptions.ValidationError`. Added matching normative honesty statements that Draft 2020-12 cannot enforce instance-field equality or Git peeling, and that NEF-T003/NEF-T005 own the enforcement seam. No cross-field behavior or schema was implemented.
+
+**Sabotage proof:** The on-disk schemas remained untouched. An in-memory copy replaced only `provisional_acknowledged: {const: true}` with `{type: boolean}`, then invoked the exact new test function at both contract layers. Both false-acknowledgement cases changed from pass to `DID NOT RAISE` test failures, proving the suite detects weakening `const: true`; both absent-field cases continued passing because the unchanged `required` rule still produced ValidationError. Result: `SABOTAGE PASS` with two expected new-test failures and two expected absent-case passes.
+
+**Verification results:**
+
+- `uv sync --locked --all-groups` - PASS; 67 packages resolved and 65 checked with no lock drift.
+- `uv run --locked ruff format --check .` - PASS; 12 files already formatted.
+- `uv run --locked ruff check .` - PASS.
+- `uv run --locked mypy --strict src tests scripts` - PASS; zero issues in 12 source files.
+- `uv run --locked pytest` - PASS; 38 tests, up from 34. `tests/test_target_pinning_schemas.py` now has 21 passing cases, up from 17.
+- Focused target-pinning suite - PASS, 21 tests.
+- In-memory `const: true` to `type: boolean` sabotage - PASS with both false vectors detected at descriptor and snapshot layers.
+- `git diff --check` - PASS.
+- `git diff -- specs/001-framework-contracts/contracts` - PASS with empty output; no schema change.
+- Exact changed-file allowlist - PASS; only the four authorized files above differ from HEAD.
+
+**Protocol evidence:** NEST m0 target SHA remains `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; NEST protocol digest remains `e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714`; the existing capability manifest remains current. The NEF protocol digest over the established 14-file input set is now `b93fc8dd4b95ff41a7faf7d81f795e6095a33e05520bd5ecc926d33d7b453cb6`, reflecting only the normative spec-002 (`ffd9d5cc894137e29f8a6399ca3d2eea30027fbb29db00cf860fb666ed1c1867`) and trust-model (`5b87a70da0847ed089fca6661e17bbb8f0286ac959eb971f218abb87b8613d19`) honesty additions; schema input digests are unchanged.
+
+**Known limitations and next action:** Cross-field equality and peeling remain unenforced by schema exactly as documented and remain T003/T005 work. Commit the four-file review fix additively on the existing branch, scan the committed history, push to the existing remote branch, verify exact SHA equality, keep PR #1 draft, and require its updated CI to pass. Do not merge or begin T003.

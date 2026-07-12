@@ -164,6 +164,7 @@ The `de8c077...` orientation predates this amendment and is retained as provisio
 - Fixtures exist but are skipped or non-executable at the selected SHA: unavailable or inconclusive according to explicit evidence; never pass.
 - Same target SHA with a different protocol input set: separate protocol digest and result partition.
 - Prior snapshot deletion makes a moved tag appear first-seen: visible detection limitation, not pass evidence about immutability.
+- Draft 2020-12 contract validation cannot compare instance fields: a provisional manifest whose `selector.pinned_sha` differs from `resolved_sha`, or a gate manifest whose `resolved_sha` is not the peel of `tag_ref_sha`, still passes schema validation. Cross-field invariant enforcement is the NEF-T003 contract-layer invariant and the NEF-T005 pin-target runtime; schema validity alone MUST NOT be read as selector/SHA coherence.
 
 ## Sabotage obligations
 

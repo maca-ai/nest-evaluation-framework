@@ -165,6 +165,40 @@ def test_provisional_descriptor_records_only_an_explicit_pinned_sha() -> None:
     validator("target-descriptor.schema.json").validate(descriptor)
 
 
+@pytest.mark.parametrize("contract_layer", ["descriptor", "snapshot"])
+@pytest.mark.parametrize("acknowledgement", [False, pytest.param("absent", id="absent")])
+def test_unacknowledged_provisional_selector_is_rejected(
+    contract_layer: str, acknowledgement: bool | str
+) -> None:
+    instance: dict[str, Any]
+    if contract_layer == "descriptor":
+        instance = {
+            "schema_version": "2.0.0",
+            "repository_url": "https://github.com/maca-ai/nest.git",
+            "target_mode": "provisional",
+            "selector": {
+                "kind": "pinned-sha",
+                "pinned_sha": SHA_A,
+                "provisional_acknowledged": True,
+            },
+            "resolved_sha": SHA_A,
+            "observed_at": "2026-07-12T07:31:38Z",
+            "source_kind": "remote",
+        }
+        schema_name = "target-descriptor.schema.json"
+    else:
+        instance = provisional_snapshot()
+        schema_name = "target-snapshot-manifest.schema.json"
+
+    if acknowledgement == "absent":
+        instance["selector"].pop("provisional_acknowledged")
+    else:
+        instance["selector"]["provisional_acknowledged"] = acknowledgement
+
+    with pytest.raises(ValidationError):
+        validator(schema_name).validate(instance)
+
+
 @pytest.mark.parametrize("mutable_ref", ["main", "HEAD", "refs/heads/main", "latest"])
 def test_mutable_ref_cannot_be_a_recorded_campaign_selector(mutable_ref: str) -> None:
     descriptor = {
