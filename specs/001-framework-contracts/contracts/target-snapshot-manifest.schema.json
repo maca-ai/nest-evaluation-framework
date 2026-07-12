@@ -1,31 +1,48 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://maca-ai.github.io/nef/schemas/1.0.0/target-snapshot-manifest.schema.json",
+  "$id": "https://maca-ai.github.io/nef/schemas/2.0.0/target-snapshot-manifest.schema.json",
   "title": "TargetSnapshotManifest",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version",
     "repository_url",
-    "requested_ref",
+    "target_mode",
+    "selector",
     "resolved_sha",
-    "branch_or_tag",
+    "evidence_class",
+    "baseline_reproducibility",
+    "tag_binding",
     "dirty",
     "nef_sha",
     "lock_digest",
     "constitution_version",
     "constitution_digest",
+    "protocol_digest",
     "relevant_source_digests",
     "environment_fingerprint",
     "consulted_paths",
     "observed_at"
   ],
   "properties": {
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "2.0.0" },
     "repository_url": { "type": "string", "format": "uri", "minLength": 1, "pattern": "^(?![^:]+://[^/@]+@).+$" },
-    "requested_ref": { "type": "string", "minLength": 1 },
+    "target_mode": { "enum": ["gate-evidence", "provisional"] },
+    "selector": {
+      "oneOf": [
+        { "$ref": "target-descriptor.schema.json#/$defs/gateSelector" },
+        { "$ref": "target-descriptor.schema.json#/$defs/provisionalSelector" }
+      ]
+    },
     "resolved_sha": { "$ref": "#/$defs/sha1" },
-    "branch_or_tag": { "type": "string", "minLength": 1 },
+    "evidence_class": { "enum": ["gate-evidence", "non-gate-evidence"] },
+    "baseline_reproducibility": { "enum": ["reproducible-baseline", "non-reproducible-baseline"] },
+    "tag_binding": {
+      "oneOf": [
+        { "$ref": "#/$defs/tagBinding" },
+        { "type": "null" }
+      ]
+    },
     "dirty": { "type": "boolean" },
     "nef_sha": {
       "oneOf": [
@@ -43,6 +60,7 @@
     "lock_digest": { "$ref": "#/$defs/sha256" },
     "constitution_version": { "$ref": "#/$defs/semver" },
     "constitution_digest": { "$ref": "#/$defs/sha256" },
+    "protocol_digest": { "$ref": "#/$defs/sha256" },
     "relevant_source_digests": {
       "type": "object",
       "minProperties": 1,
@@ -74,9 +92,77 @@
     },
     "observed_at": { "type": "string", "format": "date-time" }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "target_mode": { "const": "gate-evidence" } },
+        "required": ["target_mode"]
+      },
+      "then": {
+        "properties": {
+          "selector": { "$ref": "target-descriptor.schema.json#/$defs/gateSelector" },
+          "evidence_class": { "const": "gate-evidence" },
+          "baseline_reproducibility": { "const": "reproducible-baseline" },
+          "tag_binding": { "$ref": "#/$defs/tagBinding" }
+        }
+      },
+      "else": {
+        "properties": {
+          "selector": { "$ref": "target-descriptor.schema.json#/$defs/provisionalSelector" },
+          "evidence_class": { "const": "non-gate-evidence" },
+          "baseline_reproducibility": { "const": "non-reproducible-baseline" },
+          "tag_binding": { "type": "null" }
+        }
+      }
+    }
+  ],
   "$defs": {
     "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
     "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-    "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" }
+    "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+    "tagBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "previous_snapshot_manifest_digest",
+        "previous_tag_ref_sha",
+        "previous_resolved_sha"
+      ],
+      "properties": {
+        "state": { "enum": ["first-seen", "unchanged", "moved"] },
+        "previous_snapshot_manifest_digest": {
+          "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+        },
+        "previous_tag_ref_sha": {
+          "oneOf": [{ "$ref": "#/$defs/sha1" }, { "type": "null" }]
+        },
+        "previous_resolved_sha": {
+          "oneOf": [{ "$ref": "#/$defs/sha1" }, { "type": "null" }]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "state": { "const": "first-seen" } },
+            "required": ["state"]
+          },
+          "then": {
+            "properties": {
+              "previous_snapshot_manifest_digest": { "type": "null" },
+              "previous_tag_ref_sha": { "type": "null" },
+              "previous_resolved_sha": { "type": "null" }
+            }
+          },
+          "else": {
+            "properties": {
+              "previous_snapshot_manifest_digest": { "$ref": "#/$defs/sha256" },
+              "previous_tag_ref_sha": { "$ref": "#/$defs/sha1" },
+              "previous_resolved_sha": { "$ref": "#/$defs/sha1" }
+            }
+          }
+        }
+      ]
+    }
   }
 }

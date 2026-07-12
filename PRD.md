@@ -6,7 +6,7 @@ NEST converts physical observations into governed, attested business objects. Pe
 
 NEF's goal is an unattended daily evaluation window that selects one exact NEST revision, executes bounded adversarial and deterministic campaigns, distinguishes product failure from harness/evidence failure, preserves replayable evidence, and publishes advisory findings. A best-effort watchdog reports a missing daily result. Claim-corpus falsification against a running NEST product remains later work until NEST exposes the required runnable targets.
 
-NEST is a versioned external target. A run evaluates an immutable `NEST_TARGET_SHA`; a branch or tag is only used to resolve that SHA.
+NEST is a versioned external target. A run evaluates an immutable commit SHA. Scored gate evidence defaults to the highest numeric milestone tag (`m0`, `m1`, ...), recording both the tag ref and peeled commit. Pre-tag work may run only as an explicitly acknowledged pinned-SHA provisional campaign labelled non-gate evidence and non-reproducible baseline. Branches, `HEAD`, and other moving refs are never recorded campaign selectors, and failed gate selection never silently falls back to provisional mode.
 
 ## Target users
 
@@ -42,6 +42,12 @@ NEST is a versioned external target. A run evaluates an immutable `NEST_TARGET_S
 10. **Later milestones**: claim corpus with source-digest drift detection; disposable/recorded NEST adapters and replay verification; scorecards rebuilt solely from validated manifests.
 
 ## Target-integrity requirements
+
+### Immutable target pinning
+
+Every campaign uses one of two immutable target modes. `gate-evidence` selects an `mN` milestone tag, defaulting to the highest numeric milestone, and records the tag-ref SHA plus the peeled commit SHA. Peeling an annotated tag dereferences its tag object; peeling a lightweight tag is the identity operation. `provisional` requires a specific acknowledged commit SHA and is always non-gate evidence with a non-reproducible-baseline label. The commit remains replayable; the label means it is not an accepted milestone baseline.
+
+Prior validated snapshots are the immutable binding history. If a previously observed gate tag resolves to a different tag ref or peeled commit, NEF retains the new snapshot as violation evidence, refuses the campaign, and emits a deterministic candidate finding. Deleting prior history can evade this comparison; append-only/hash-chained snapshot history is the named later hardening seam.
 
 ### Current hash-chain protocol
 

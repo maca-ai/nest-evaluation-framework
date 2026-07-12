@@ -1,0 +1,64 @@
+[project]
+name = "nest-evaluation-framework"
+version = "0.1.0"
+description = "Provider-neutral evaluation and verification for exact NEST revisions"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+  "cryptography==49.0.0",
+  "httpx==0.28.1",
+  "opentelemetry-api==1.43.0",
+  "opentelemetry-sdk==1.43.0",
+  "pydantic==2.13.4",
+  "pyyaml==6.0.3",
+]
+
+[dependency-groups]
+dev = [
+  "bandit==1.9.4",
+  "hypothesis==6.156.6",
+  "import-linter==2.13",
+  "jsonschema==4.26.0",
+  "mypy==2.2.0",
+  "pip-audit==2.10.1",
+  "pytest==9.1.1",
+  "pytest-asyncio==1.4.0",
+  "ruff==0.15.21",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+explicit_package_bases = true
+mypy_path = ["src", "."]
+files = ["src", "tests", "scripts"]
+
+[tool.importlinter]
+root_packages = ["nef"]
+
+[[tool.importlinter.contracts]]
+name = "Contracts remain independent"
+type = "forbidden"
+source_modules = ["nef.contracts"]
+forbidden_modules = [
+  "nef.engine",
+  "nef.evidence",
+  "nef.report",
+  "nef.target",
+  "nef.weapons",
+]

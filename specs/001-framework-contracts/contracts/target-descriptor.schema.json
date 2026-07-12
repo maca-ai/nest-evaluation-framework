@@ -1,26 +1,64 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://maca-ai.github.io/nef/schemas/1.0.0/target-descriptor.schema.json",
+  "$id": "https://maca-ai.github.io/nef/schemas/2.0.0/target-descriptor.schema.json",
   "title": "TargetDescriptor",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version",
     "repository_url",
-    "requested_ref",
+    "target_mode",
+    "selector",
     "resolved_sha",
     "observed_at",
     "source_kind"
   ],
   "properties": {
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "2.0.0" },
     "repository_url": { "type": "string", "format": "uri", "minLength": 1, "pattern": "^(?![^:]+://[^/@]+@).+$" },
-    "requested_ref": { "type": "string", "minLength": 1 },
+    "target_mode": { "enum": ["gate-evidence", "provisional"] },
+    "selector": {
+      "oneOf": [
+        { "$ref": "#/$defs/gateSelector" },
+        { "$ref": "#/$defs/provisionalSelector" }
+      ]
+    },
     "resolved_sha": { "$ref": "#/$defs/sha1" },
     "observed_at": { "type": "string", "format": "date-time" },
     "source_kind": { "enum": ["local", "remote"] }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "target_mode": { "const": "gate-evidence" } },
+        "required": ["target_mode"]
+      },
+      "then": { "properties": { "selector": { "$ref": "#/$defs/gateSelector" } } },
+      "else": { "properties": { "selector": { "$ref": "#/$defs/provisionalSelector" } } }
+    }
+  ],
   "$defs": {
-    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "gateTag": { "type": "string", "pattern": "^m(0|[1-9][0-9]*)$" },
+    "gateSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "gate_tag", "tag_ref_sha"],
+      "properties": {
+        "kind": { "const": "gate-tag" },
+        "gate_tag": { "$ref": "#/$defs/gateTag" },
+        "tag_ref_sha": { "$ref": "#/$defs/sha1" }
+      }
+    },
+    "provisionalSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "pinned_sha", "provisional_acknowledged"],
+      "properties": {
+        "kind": { "const": "pinned-sha" },
+        "pinned_sha": { "$ref": "#/$defs/sha1" },
+        "provisional_acknowledged": { "const": true }
+      }
+    }
   }
 }

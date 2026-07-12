@@ -1,5 +1,7 @@
 # Initial NEST target capability profile
 
+**Selection classification (2026-07-12 amendment):** `provisional` / `non-gate-evidence` / `non-reproducible-baseline`. The exact SHA remains replayable, but no NEST `m1` gate tag binds this revision, so this historical main-derived orientation cannot count as milestone evidence.
+
 ## Provenance
 
 - Repository: `https://github.com/maca-ai/nest.git`
@@ -58,4 +60,4 @@ The selected target is constitution 1.3.0. It has no ratified signing message, k
 
 ## Refresh rule
 
-When a new NEST ref is supplied, resolve it to a new exact SHA, create a new snapshot and capability manifest, and amend this profile through the normal review process. Never mutate this profile to describe a moving ref retrospectively.
+For gate evidence, pin the highest numeric `mN` tag by default, record tag-ref plus peeled commit, and compare prior validated bindings. For pre-gate work, create a new explicitly acknowledged provisional exact-SHA profile. Never mutate this profile to describe another revision or promote it retrospectively.

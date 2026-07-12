@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://maca-ai.github.io/nef/schemas/1.0.0/campaign-request.schema.json",
+  "$id": "https://maca-ai.github.io/nef/schemas/2.0.0/campaign-request.schema.json",
   "title": "CampaignRequest",
   "type": "object",
   "additionalProperties": false,
@@ -20,14 +20,14 @@
     "randomness"
   ],
   "properties": {
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "2.0.0" },
     "run_id": { "type": "string", "minLength": 1 },
     "scheduled_date": { "type": "string", "format": "date" },
     "attempt": { "type": "integer", "minimum": 1 },
     "campaign_id": { "$ref": "#/$defs/stableId" },
-    "target_snapshot_manifest": { "$ref": "target-snapshot-manifest.schema.json" },
+    "target_snapshot_manifest": { "$ref": "https://maca-ai.github.io/nef/schemas/2.0.0/target-snapshot-manifest.schema.json" },
     "target_snapshot_manifest_digest": { "$ref": "#/$defs/sha256" },
-    "target_capability_manifest": { "$ref": "target-capability-manifest.schema.json" },
+    "target_capability_manifest": { "$ref": "https://maca-ai.github.io/nef/schemas/1.0.0/target-capability-manifest.schema.json" },
     "target_capability_manifest_digest": { "$ref": "#/$defs/sha256" },
     "campaign_configuration_digest": { "$ref": "#/$defs/sha256" },
     "budgets": {
@@ -53,6 +53,25 @@
       }
     }
   },
+  "allOf": [
+    {
+      "not": {
+        "properties": {
+          "target_snapshot_manifest": {
+            "properties": {
+              "tag_binding": {
+                "type": "object",
+                "properties": { "state": { "const": "moved" } },
+                "required": ["state"]
+              }
+            },
+            "required": ["tag_binding"]
+          }
+        },
+        "required": ["target_snapshot_manifest"]
+      }
+    }
+  ],
   "$defs": {
     "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
     "decimal": { "type": "string", "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$" },

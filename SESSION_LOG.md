@@ -345,3 +345,308 @@ Consulted target paths, in orientation order: `AGENTS.md`; `PRD.md`; `PLANNING.m
 **Target context:** NEST target SHA remains `de8c0772dcb1890bfbf7c2c449a4252f63e0807a`; integrity-protocol digest remains `a41f9890187c18153890645f1a3cf7fc038e25e3f0ed13fcbde06f9abda80e40`. The target capability manifest remains current: T-014 and T-015 available; T-016 and Ed25519 explicit `skipped/unavailable` cases.
 
 **Exact next action:** verify and commit only `TASKS.md` and `SESSION_LOG.md` on `docs/NEF-T001-specifications`, push the task branch checkpoint, then create `main` at that same exact tip under the one-time authorization.
+
+## 2026-07-12 - NEF-T002 goal-mode implementation plan
+
+**Genesis closeout evidence:** Authorized additive genesis creation succeeded. `refs/heads/main` and `refs/heads/docs/NEF-T001-specifications` both resolve to `d3d22bd6690323a495d10b9b3812bf7457d286da`; GitHub reports `main` as the default branch. The task branch is retained as a recovery reference. The one-time exception is exhausted. NEF-T002 branches from verified `origin/main` as `feat/NEF-T002-reproducible-scaffold` and returns to mandatory draft-PR discipline.
+
+**Task / milestone:** NEF-T002 - Reproducible scaffold and trusted CI; v1 foundation milestone. It is the top eligible Pending task and the only implementation task in progress.
+
+**Target refresh before design:** At `2026-07-12T05:31:18Z`, read-only `git ls-remote https://github.com/maca-ai/nest.git refs/heads/main` resolved the configured moving ref to `1e989338e4f67342ecb5139a58aaaa64fb70b295`, not the prior T001 SHA. A new disposable detached checkout exists at `.targets/nest/1e989338e4f67342ecb5139a58aaaa64fb70b295`; it is clean, has tree `8b8c4b795d1024b41e50ac5175af0163a869f13c`, commit time `2026-07-11T16:25:24+02:00`, and subject `feat(core): T-016 namespaced identity + sensor-replacement event + rdo-created emission (#19)`. The optional original local checkout is also clean at that exact SHA. No NEST test or campaign ran and no NEST file was written.
+
+**Target snapshot:** repository `https://github.com/maca-ai/nest.git`; requested ref `main`; exact SHA `1e989338e4f67342ecb5139a58aaaa64fb70b295`; detached/clean; NEF SHA `d3d22bd6690323a495d10b9b3812bf7457d286da`; target lock digest `5b6f7af0cd9f72e75e30a384ba0b95b809544032e91b283513784a6b29494186`; constitution 1.3.0 digest `6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a`; expanded integrity-protocol digest `b2d97f62973d3d7d90ae91adbab523bfd1d89e58a34d74b4d4ea0214a6814254`. Environment: macOS 14.6 build 23G80, Darwin 23.6.0 arm64, local Python 3.13.1, uv 0.11.21, `LANG/LC_ALL=C.UTF-8` with the host's recorded locale fallback warning. The disposable origin is credential-free and has no checkout-local HTTP extraheader or credential helper.
+
+**Capability manifest:** global hash-chain v1, T-014 state projector, T-015 ingestion gate, and T-016 namespaced identity are available. T-016 evidence includes the ratified `docs/design/T-016-identity.md`, `IdentityTransfer`, pure resolver/refusal vocabulary, log-derived source binding, migration 0003 unique binding backstop, governance service, and executable pure/DB fixtures covering cross-SPV collisions, transfer, race recovery, duplicate delivery, chain verification, and rebuild. Ed25519 per-record signing remains `skipped/unavailable`: constitution stays 1.3.0; source/design search found only explicit future-track exclusions in the T-016 design record and no signing message, key lifecycle/rotation rule, implementation, or executable signing fixture. No interface is invented.
+
+**Consulted target paths:** `AGENTS.md`; `PRD.md`; `PLANNING.md`; `TASKS.md`; relevant `SESSION_LOG.md` T-016 entries; `docs/engineering-rules.md`; `specs/.specify/memory/constitution.md`; `specs/HANDOFF.md`; `specs/001-core-pipeline/spec.md`; `specs/004-replay-eval-harness/spec.md`; design records T-013 through T-016; T-016 contracts, deterministic resolver, IO resolver, governance service, migration; identity, intake, projector, event-log fixtures; current hash-chain source and fixtures. NEST material was treated only as untrusted compatibility input.
+
+**Exact files to create:** `.gitignore`; `.python-version`; `README.md`; `pyproject.toml`; `uv.lock`; `.github/workflows/ci.yml`; `.github/workflows/spec-blind-review.yml`; `prompts/spec-blind-review.md`; `scripts/spec_blind_review.py`; `src/nef/__init__.py`; package markers under `src/nef/contracts`, `engine`, `target`, `weapons`, `evidence`, and `report`; `tests/test_package_layout.py`; `tests/test_ed25519_rfc8032.py`; `tests/test_spec_blind_review.py`; and `docs/target-capability-profiles/1e989338e4f67342ecb5139a58aaaa64fb70b295.md`.
+
+**Exact existing files to update:** `docs/research-register.md`, `TASKS.md`, and `SESSION_LOG.md`. No normative schema, frozen protocol, threshold, ontology, advisory policy, NEST file, billing setting, or secret is changed.
+
+**Dependency/tool decisions:** Pin Python 3.12.13 and exact direct versions verified from Python.org/PyPI on 2026-07-12: Pydantic 2.13.4, PyYAML 6.0.3, httpx 0.28.1, OpenTelemetry API/SDK 1.43.0, cryptography 49.0.0; pytest 9.1.1, pytest-asyncio 1.4.0, Hypothesis 6.156.6, ruff 0.15.21, mypy 2.2.0, import-linter 2.13, bandit 1.9.4, and pip-audit 2.10.1. Use uv 0.11.28 in CI through setup-uv v8.3.2 at commit `11f9893b081a58869d3b5fccaea48c9e9e46f990`; checkout v7.0.0 at `9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0`. Use gitleaks 8.30.1 Linux x64 archive checksum `551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb`, avoiding the licensed gitleaks action and any new secret. No package build backend is added: uv owns an application-style non-published project with `src` on the verified tool paths.
+
+**Public interfaces:** This task creates only the importable `nef` package/version marker and architectural module boundaries; it does not implement or alter the frozen Campaign/contracts API. The reviewer script accepts a GitHub `workflow_run` event, fetches the PR diff through the API, enforces byte/file/secret-pattern bounds, sends it as untrusted data to Anthropic, validates a closed JSON candidate-review shape, and emits an advisory artifact. Its model is canonical pinned snapshot `claude-fable-5`; sampling parameters are omitted because Fable rejects non-default sampling; maximum output and schema are fixed. No model verdict gates a merge.
+
+**Workflow trust design:** Unprivileged `pull_request`/push CI gets read-only contents and executes PR code with no provider secret or write token. The spec-blind workflow uses `workflow_run` after successful CI, checks out only trusted default-branch code at the event's repository default SHA, never checks out PR code, fetches the bounded diff as data, has read-only repository permission, and exposes only `ANTHROPIC_API_KEY`. It uploads/prints advisory evidence without commenting or mutating GitHub. The T002 PR can run the new unprivileged CI and locally test the privileged workflow implementation, but GitHub cannot run a newly introduced `workflow_run` definition until it exists on the default branch; that bootstrap limitation remains explicit and is not worked around with privileged head code.
+
+**Tests and cross-artifact analysis:** Test importability and module inventory; verify pyproject pins and workflow action SHAs; apply RFC 8032 Ed25519 test vector 1 using synthetic fixture bytes and prove message/signature/public-key tampering fails independently; unit-test diff bounds, secret refusal, response schema/stop-state validation, and prompt/data separation without network. Cross-check task, plan, README commands, lock, CI commands, module layout, trust model, research register, target profile, and T001 frozen specs. Missing provider credentials skip external reviewer execution rather than fabricate success.
+
+**Verification commands:** `uv lock --check`; `uv sync --locked --all-groups`; `uv run --locked ruff format --check .`; `uv run --locked ruff check .`; `uv run --locked mypy --strict src tests scripts`; `uv run --locked pytest`; `uv run --locked lint-imports`; `uv run --locked bandit -q -r src scripts`; `uv export --locked --no-dev --no-emit-project --format requirements-txt` followed by `uv run --locked pip-audit -r <export>`; local gitleaks 8.30.1 scan if the verified binary is available; JSON/YAML parse and action-pin assertions; `git diff --check`; CLAUDE invariant; target checkout/original checkout clean checks; staged and complete branch diff review.
+
+**Risks:** moving-target capability drift; first privileged-review workflow bootstrap; action/tool supply chain; Python 3.12 source-only upstream lifecycle; model retention/cost and prompt injection; accidentally staging `.targets/`; security scanner false negatives; empty skeleton making architectural checks vacuous. Mitigations: immutable target profile per SHA, explicit bootstrap limitation, exact action/tool/package pins and lock, bounded/advisory trusted-base review, `.gitignore` first, sabotage tests for reviewer refusal, import-linter boundary contract, and no target/provider execution in scaffold tests.
+
+**Hard-stop audit:** No current hard-stop. All dependencies and providers are already allowed by `PLANNING.md`; no billing, secret, remote, NEST, schema, protocol, threshold, ontology, or advisory-policy mutation is planned. Stop if a required package or action cannot be verified, a security check repeats the same failure twice, GitHub requires unsafe privileged execution, provider configuration/secret creation is needed, or acceptance would require changing a frozen artifact.
+
+**Scope expansion:** Only the required target-refresh profile and genesis remote evidence accompany NEF-T002; both are mandated by the goal and do not alter target behavior. No NEF-T003 contract implementation begins.
+
+## 2026-07-12 - approved immutable target-pinning amendment
+
+**Supersession and authority:** Matthias approved this dated amendment after the preceding NEF-T002 plan had begun but before any checkpoint. It supersedes that plan's moving-`main` target-selection assumption and explicitly authorizes the breaking target-contract, constitution, and development-dependency changes below. Historical observations remain append-only. The earlier `de8c0772dcb1890bfbf7c2c449a4252f63e0807a` and `1e989338e4f67342ecb5139a58aaaa64fb70b295` records are retained and reclassified as provisional/non-gate evidence rather than erased or rewritten.
+
+**Approved target-selection law:** Recorded campaigns never select a mutable ref. Default scored evidence uses the highest numeric NEST milestone gate tag matching `mN`; numeric ordering makes `m10` later than `m9`. The selected tag is resolved at pin time to both its tag-ref SHA and its peeled commit SHA. Peeling an annotated tag dereferences the tag object; peeling a lightweight tag is the identity operation because its tag-ref SHA is already a commit. Explicit pre-gate evaluation uses only an acknowledged exact commit SHA and is labelled `provisional`, `non-gate-evidence`, and `non-reproducible-baseline`. It remains byte-replayable by SHA; the baseline label means it cannot support milestone scoring. Missing gate tags never trigger a provisional fallback.
+
+**Pin-time remote evidence:** At `2026-07-12T07:31:38Z`, read-only tag enumeration for `https://github.com/maca-ai/nest.git` returned only annotated gate tag `m0`: tag-ref SHA `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled commit `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`. `m1` is absent. A disposable clone was checked out detached and clean at `.targets/nest/cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; tree `77ccd2fc1a41dd365a3b3b98508bb0534b56c95f`; commit time `2026-07-09T08:17:50+02:00`; subject `T-004: M0 gate passed — sign-off recorded, M0 complete (#6)`. Its origin URL contains no userinfo. No target test or campaign ran and no target file was written. Matthias's optional original local NEST checkout was clean before inspection at independent SHA `83d5bbddc5368aea921b368096b611c509a51403` and remains planning context only.
+
+### TargetDescriptor 2.0.0 - gate default
+
+```yaml
+schema_version: 2.0.0
+repository_url: https://github.com/maca-ai/nest.git
+target_mode: gate-evidence
+selector:
+  kind: gate-tag
+  gate_tag: m0
+  tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+observed_at: 2026-07-12T07:31:38Z
+source_kind: remote
+```
+
+### TargetSnapshotManifest 2.0.0 - m0
+
+```yaml
+schema_version: 2.0.0
+repository_url: https://github.com/maca-ai/nest.git
+target_mode: gate-evidence
+selector:
+  kind: gate-tag
+  gate_tag: m0
+  tag_ref_sha: 8362f666336c429812fbf32aabc8eaaf1d9ac47a
+resolved_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+evidence_class: gate-evidence
+baseline_reproducibility: reproducible-baseline
+tag_binding:
+  state: first-seen
+  previous_snapshot_manifest_digest: null
+  previous_tag_ref_sha: null
+  previous_resolved_sha: null
+dirty: false
+nef_sha: d3d22bd6690323a495d10b9b3812bf7457d286da
+lock_digest: 9f5e25f611865b3e37951b5975c27af4ed1229a1610f7bff00418aa56059e853
+constitution_version: 1.3.0
+constitution_digest: 6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a
+protocol_digest: e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714
+relevant_source_digests:
+  docs/DECISIONS-2026-07-06-REDTEAM.md: 55e61cb1b5a87e4ccd151828cb7bd2416b3f14009470402e3364b31bb6a92a91
+  specs/.specify/memory/constitution.md: 6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a
+  specs/001-core-pipeline/spec.md: 1a095743c37a0c3de7a3db36e9a0e8137aac8c92e7bb73096d0a5421a9d501f1
+environment_fingerprint:
+  digest: edd95b9acf193017415adb447894aa5b2dd13057729633531d1e85522631ab40
+  runner: local-codex
+  operating_system: macOS 14.6 build 23G80
+  architecture: arm64
+  locale: C.UTF-8 (host fallback C)
+  timezone: Europe/Vienna
+  tool_versions:
+    python: 3.13.1
+    uv: 0.11.21
+consulted_paths:
+  - AGENTS.md
+  - PRD.md
+  - PLANNING.md
+  - TASKS.md
+  - SESSION_LOG.md
+  - specs/.specify/memory/constitution.md
+  - specs/HANDOFF.md
+  - specs/001-core-pipeline/spec.md
+  - specs/004-replay-eval-harness/spec.md
+  - docs/DECISIONS-2026-07-06-BUILD-AUDIT.md
+  - docs/DECISIONS-2026-07-06-REDTEAM.md
+  - packages/nest-core/README.md
+  - packages/nest-core/pyproject.toml
+  - packages/nest-core/src/nest_core/__init__.py
+  - packages/nest-core/tests/test_smoke.py
+  - pyproject.toml
+  - uv.lock
+observed_at: 2026-07-12T07:31:38Z
+```
+
+**Protocol inputs and digests:** `specs/.specify/memory/constitution.md` = `6ee91bfd6eb150ca73199f29a9b6dfa5085c9ebd619c6186b8ee59b6fd7ac47a`; `specs/001-core-pipeline/spec.md` = `1a095743c37a0c3de7a3db36e9a0e8137aac8c92e7bb73096d0a5421a9d501f1`; `docs/DECISIONS-2026-07-06-REDTEAM.md` = `55e61cb1b5a87e4ccd151828cb7bd2416b3f14009470402e3364b31bb6a92a91`. The protocol digest is SHA-256 of their lexicographically sorted `sha256  path` lines. Environment input: local Codex runner, macOS 14.6 build 23G80, arm64, `C.UTF-8` with host fallback `C`, Europe/Vienna, Python 3.13.1, uv 0.11.21.
+
+### TargetCapabilityManifest - m0
+
+```yaml
+schema_version: 1.0.0
+target_sha: cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+protocol_digest: e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714
+capabilities:
+  - capability_id: target-binding
+    state: available
+    evidence:
+      - annotated m0 tag-ref 8362f666336c429812fbf32aabc8eaaf1d9ac47a peeled to cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12
+    reason: null
+  - capability_id: global-hash-chain-v1
+    state: unavailable
+    evidence:
+      - packages/nest-core contains only package metadata, a package marker, and a smoke test
+    reason: no event-log implementation, migration, verifier, or executable chain fixture at m0
+  - capability_id: t-014-state-projector
+    state: unavailable
+    evidence:
+      - capability search found no projector implementation or executable fixture at m0
+    reason: implementation and executable fixture are absent
+  - capability_id: t-015-ingestion-gate
+    state: unavailable
+    evidence:
+      - capability search found no ingestion-gate implementation or executable fixture at m0
+    reason: implementation and executable fixture are absent
+  - capability_id: t-016-namespaced-identity
+    state: unavailable
+    evidence:
+      - capability search found no namespaced-identity implementation or executable fixture at m0
+    reason: implementation and executable fixture are absent
+  - capability_id: ed25519-per-record-signing
+    state: unavailable
+    evidence:
+      - constitution 1.3.0 and searched source expose no ratified signing protocol or fixture
+    reason: ratified message, key lifecycle, implementation, and executable fixture are absent
+required_campaigns:
+  - target-integrity/target-binding
+unavailable_campaigns_with_reasons:
+  - campaign_id: target-integrity/global-hash-chain-v1
+    state: skipped
+    reason: global chain behavior is specified but not executable at m0
+    missing_evidence:
+      - event-log implementation
+      - migration
+      - verifier
+      - executable chain fixture
+  - campaign_id: target-integrity/t-014-state-projector
+    state: skipped
+    reason: T-014 is not implemented at m0
+    missing_evidence:
+      - projector implementation
+      - executable projector fixture
+  - campaign_id: target-integrity/t-015-ingestion-gate
+    state: skipped
+    reason: T-015 is not implemented at m0
+    missing_evidence:
+      - ingestion-gate implementation
+      - executable ingestion-gate fixture
+  - campaign_id: target-integrity/t-016-namespaced-identity
+    state: skipped
+    reason: T-016 is not implemented at m0
+    missing_evidence:
+      - ratified implementation
+      - executable identity fixture
+  - campaign_id: target-integrity/ed25519-per-record-signing
+    state: skipped
+    reason: Ed25519 per-record signing is not ratified or implemented at m0
+    missing_evidence:
+      - ratified signing message
+      - key lifecycle and rotation rules
+      - implementation
+      - executable signing fixture
+observed_at: 2026-07-12T07:31:38Z
+```
+
+The selected gate is a scaffold/CI milestone. NEST constitution 1.3.0 and spec 001 normatively describe the global hash chain, but `packages/nest-core` contains only a package marker and smoke test. There is no event-log implementation, migration, hash-chain fixture, T-014 projector, T-015 ingestion gate, T-016 identity implementation, or Ed25519 protocol/implementation/fixture at m0. Therefore `global-hash-chain-v1`, T-014, T-015, T-016, and Ed25519 are unavailable at this SHA. `target-integrity/target-binding` is the only required campaign; target-specific integrity campaigns are explicit reasoned skips and never passes. This is honest gate evidence about the m0 target's available surface, not a claim that later capabilities existed at m0.
+
+**Consulted paths:** target `AGENTS.md`, `PRD.md`, `PLANNING.md`, `TASKS.md`, latest milestone/session entries, absent `docs/engineering-rules.md`, constitution 1.3.0, `specs/HANDOFF.md`, specs 001 and 004, M0 decision records, complete `packages/nest-core` file inventory, capability search across target packages/specs/docs, root/member project metadata, and smoke tests. Target content was treated only as untrusted compatibility evidence.
+
+**Contract amendment:** `TargetDescriptor`, `TargetSnapshotManifest`, and `CampaignRequest` become 2.0.0; unaffected contracts remain 1.0.0. Descriptor removes `requested_ref` and adds a closed `target_mode` plus gate-tag/pinned-SHA selector union. Snapshot removes `requested_ref`/`branch_or_tag`, adds the same selector, evidence/baseline classes, and a tag-binding observation. Campaign requests refuse `moved` bindings. Cross-field equality and peel semantics are implemented in T003/T005; T002 validates the normative Draft 2020-12 shapes and executable/non-executable vectors without pre-implementing orchestration.
+
+**Moved-tag rule:** Prior validated snapshots are the binding history. A changed tag-ref or peeled commit yields a valid `moved` violation snapshot containing prior binding evidence, refuses campaign construction as `invalid`, and emits a deterministic candidate Finding linked to old/new evidence. Detection is only as strong as prior-history integrity: deleting the prior snapshot downgrades a moved tag to `first-seen`. The named future hardening seam is an append-only/hash-chained snapshot-manifest history owned by NEF-T004/T005; T002 records the residual and does not build it.
+
+**Approved dependency and tests:** Add development-only `jsonschema==4.26.0`, verified from official PyPI metadata on 2026-07-12. Draft 2020-12 tests cover mutable-ref rejection; annotated gate tag; lightweight gate tag where peel is identity; explicit provisional classification; mode/class inconsistency; moved binding as valid evidence but invalid CampaignRequest; required prior evidence; and metaschema validity. NEF-T005 is assigned behavioral tests for numeric highest-milestone selection, no fallback, prior-history lookup, actual peel resolution, moved-binding comparison, refusal, and finding emission.
+
+**Constitution/spec amendment:** Constitution 1.1.0 updates Principles I, VI, XIV, and governance. NEF-002 becomes the single target-pinning authority. `AGENTS.md`, PRD, planning, trust model, kickoff prompts, clarifications, source matrix, public interfaces, cross-artifact analysis, target profiles, task routing, and research register are aligned. A new NEF protocol digest is recorded after the final approved artifacts exist; it is distinct from every NEST target protocol digest.
+
+**Implementation sequence:** TDD one schema behavior at a time; update schemas/spec/control artifacts; reclassify historical profiles; add the m0 profile; add the approved dependency and regenerate lock; apply pending mechanical Ruff formatting; finish the existing T002 scaffold; run the complete verification suite; review the complete branch diff; update task/session evidence; commit and push only the task branch; open a draft PR to `main`; wait for CI/review and the merge approval boundary. Genesis is exhausted.
+
+**Hard-stop audit:** Matthias explicitly approved the frozen-schema, constitution, baseline-policy, and dependency changes. No NEST write, external tag mutation, secret/billing configuration, second target, hosted service, model gate, customer data, production key, automatic promotion, force-push, or direct-main action is authorized or planned.
+
+## 2026-07-12 - NEF-T002 implementation checkpoint prepared
+
+**Task / milestone:** NEF-T002 - Reproducible scaffold and trusted CI; v1 foundation milestone. Implementation and proportionate local verification are complete. The task remains open until the branch checkpoint is pushed, the draft PR exists, required GitHub CI/review evidence is assessed, and Matthias approves the merge boundary.
+
+**Branch and repository:** `feat/NEF-T002-reproducible-scaffold`, based on verified `origin/main` at `d3d22bd6690323a495d10b9b3812bf7457d286da`. `origin` fetch/push is exactly `https://github.com/maca-ai/nest-evaluation-framework.git`. The branch is neither `main`/`master` nor detached. The worktree contains only the intended T002 scaffold, approved target-pinning amendment, target profiles, tests, and control/evidence updates; nothing is staged at this record point.
+
+**Files changed:** Created `.gitignore`, `.python-version`, `README.md`, `pyproject.toml`, `uv.lock`, `.github/workflows/ci.yml`, `.github/workflows/spec-blind-review.yml`, `prompts/spec-blind-review.md`, `scripts/spec_blind_review.py`, the seven `src/nef` package markers, four test modules, and target profiles for `1e989338e4f67342ecb5139a58aaaa64fb70b295` and `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`. Updated `AGENTS.md`, `PRD.md`, `PLANNING.md`, `TASKS.md`, `build-kickoff-prompt.md`, constitution 1.1.0, specs 001/002 and clarifications, the TargetDescriptor/TargetSnapshotManifest/CampaignRequest 2.0.0 schemas, public interfaces, trust model, source matrix, cross-artifact analysis, research register, the historical `de8c077...` target profile, and this session log. `CLAUDE.md` remains byte-for-byte `@AGENTS.md` plus one final newline.
+
+**Implemented decisions:** Python 3.12.13 and every direct dependency/tool are exactly locked. CI uses read-only permissions, full-SHA actions, format/lint/strict-type/test/architecture/security/dependency/secret checks, and no provider secret. The separate advisory reviewer runs only after successful same-repository PR CI from trusted `main` code, never checks out PR code, bounds and secret-scans the diff, treats it as untrusted JSON data, validates a closed candidate-only response, and has no write permission. The newly introduced `workflow_run` cannot execute for the T002 PR until its definition exists on the default branch; T002 therefore verifies its code and sabotage paths locally and does not work around the bootstrap limitation by executing secret-bearing PR-head code.
+
+**Target-pinning amendment:** TargetDescriptor, TargetSnapshotManifest, and CampaignRequest are 2.0.0; unaffected contracts remain 1.0.0. Gate evidence defaults to the highest numeric `mN`, records tag-ref plus peeled commit, permits annotated and lightweight identity peeling, and never falls back. Provisional work requires an acknowledged exact SHA and is non-gate/non-reproducible-baseline. Prior validated snapshots supply binding history; moved bindings remain valid violation evidence, are refused as CampaignRequest input, and require a deterministic candidate Finding in T005. The deletion weakness and later append-only/hash-chained T004/T005 hardening seam remain explicit.
+
+**Current NEST target evidence:** A final read-only `git ls-remote --tags https://github.com/maca-ai/nest.git` recheck returned only unchanged annotated `m0`: tag-ref `8362f666336c429812fbf32aabc8eaaf1d9ac47a`, peeled commit `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; `m1` remains absent. The disposable checkout remains detached and clean at the peeled commit. Current NEST target protocol digest is `e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714`; current capability disposition is target-binding required/available and global-chain, T-014, T-015, T-016, and Ed25519 reasoned unavailable skips at m0.
+
+The optional original NEST checkout was rechecked read-only and had independently drifted since orientation: it remains at `83d5bbddc5368aea921b368096b611c509a51403` on `feat/T-026-ed25519-signing`, is one commit behind its upstream, and now contains untracked `scripts/ci/build_status.py`. No NEF command wrote there, no test/campaign ran there, and it is excluded from target execution and checkpoint inputs. This drift is retained as evidence rather than described as clean or silently removed.
+
+**NEF protocol digest:** `5cf8f5fc9d39b04bd3eb4513406ee175148610407d6a76491e20942c4a07406b`. Construction is SHA-256 over lexicographically sorted `sha256  path` lines for constitution 1.1.0, specs 001/002, all eight normative schemas, `docs/public-interfaces.md`, `docs/trust-model.md`, and `docs/source-availability-matrix.md`. Input digests are: constitution `ce11ee3bb3352b2ac972efd12d3fc8bbe1b6ea84e1e54bc66fd8fb65a6168d2a`; spec 001 `e908fdb12b04a838430c22b74fa2438d8ff6dee0e2ea3c97e3f874e2322c0238`; spec 002 `eaeac7613da3c452be6a414ed4fb035cbc379d50bf01f83bd577194af5d55869`; TargetDescriptor `9b913c8a779aa2aafa873f1418a707b52aee0d7607fd059cfb013f521e984d9d`; TargetSnapshotManifest `e289492ed157ad2442d6c008027bf7217f1326ec5334117a98f6473be20b3fdd`; TargetCapabilityManifest `39fce559908bb2e1cdee28ac30a449b69a9e488be89420f5b8a4f35ba6c07530`; CampaignRequest `d4d441290b0847c785d59f9f784448614eab5fdf7c134d161cdd933eddae4adb`; CampaignResult `ec5e2b173fd1ba576fea6edcd5b160d604c75c079c3bf3128d2059a4749d71eb`; EvidenceManifest `70fb0ec8b94986ef1c6debb3e4d54f8f4f2c6629acabdc25d1648d3dc26f57c6`; Finding `ce22240176472ecd5ac934aa5e00f66e1144fb400a92dd340ed430573bfcacaf`; Disposition `6b946c532ef9f551d3b44dd6959c18674cb5cffb2fde45faa97ac6c167bf423a`; public interfaces `aa14801415498d601dc4ca5552dda3ae227e2230f92ba5141f236972b3d57698`; trust model `5c340e0eefe761861eb8f84cad4c1a393078abb7ac4472789d5e18349933397b`; source matrix `b4751efed63e1125eea10485e3e322e3da78dd493ee57b38b26d4fc56d9d3c50`.
+
+**Verification evidence:**
+
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv sync --offline --locked --all-groups` - PASS, 67 packages resolved and 65 checked.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv lock --check` - PASS, 67 packages resolved with no drift.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --offline --locked ruff format --check .` - PASS, 12 files already formatted after the approved mechanical Ruff pass.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --offline --locked ruff check .` - PASS.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --offline --locked mypy --strict src tests scripts` - PASS, 12 source files, zero issues.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --offline --locked pytest` - PASS, 34 tests including 17 target-pinning schema tests, 9 reviewer tests, 5 RFC 8032 tests, and 3 layout/workflow tests.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache PYTHONPATH=src uv run --offline --locked lint-imports` - PASS, one architecture contract kept.
+- `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --offline --locked bandit -q -r src scripts` - PASS.
+- `uv export --offline --locked --no-dev --no-emit-project --format requirements.txt --output-file /tmp/nef-requirements.txt` followed by `UV_CACHE_DIR=/tmp/nef-uv-cache uv run --offline --locked pip-audit --cache-dir /tmp/nef-pip-audit-cache --disable-pip --require-hashes --requirement /tmp/nef-requirements.txt` - PASS, no known vulnerabilities.
+- Official gitleaks v8.30.1 Darwin arm64 archive checksum `b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5` matched the official release checksum; `/tmp/nef-gitleaks-v8.30.1/gitleaks dir --redact --no-banner .` - PASS, no leaks in the working tree. CI independently verifies the pinned Linux archive checksum before scanning Git history.
+- `git diff --check` - PASS.
+- `test "$(cat CLAUDE.md)" = '@AGENTS.md'` and final-byte newline check - PASS.
+- `.DS_Store` repository search - PASS, absent; `.gitignore` contains `.DS_Store` and `.targets/`.
+- Final remote tag check and disposable checkout status - PASS, unchanged binding and detached clean target.
+
+**Known limitations and risks:** The T002 PR itself cannot trigger a workflow newly introduced only in its head; first live secret-bearing spec-blind execution is available only after trusted merge to `main`. The reviewer is advisory and provider/model failures remain non-success. Import-linter currently proves a deliberately sparse boundary graph. Moved-tag detection depends on retained prior snapshots until T004/T005 harden the history. The m0 gate cannot exercise later NEST product-integrity campaigns. The independently dirty original NEST checkout is not evaluation input.
+
+**Exact next action:** Review the final unstaged and staged diffs, stage only the listed T002 files, create the required Conventional Commit checkpoint, push `feat/NEF-T002-reproducible-scaffold`, verify remote/local SHA equality, open a draft PR to `main`, and inspect GitHub CI/review status. Do not merge or begin NEF-T003 without the applicable approval.
+
+**Append-only commit-message correction:** The implementation commit `5ba3b760ddb7ae4201556a6655b5109b85179431` was created with the intended Conventional Commit subject and What/Why/Verification headings, but shell interpolation expanded backtick-delimited verification commands into their output. The expansion reran locked checks (including a successful dependency audit); a bare `gitleaks` lookup failed because the verified binary is intentionally at `/tmp/nef-gitleaks-v8.30.1/gitleaks`. No source or history was changed by those command substitutions, no secret was printed, and the implementation commit itself succeeded. History will not be amended or rewritten. This journal update and a follow-up Conventional Commit preserve an append-only correction with literal exact commands. The local branch tip has not yet been pushed.
+
+**Revised exact next action:** Commit this transparent metadata correction with literal verification commands, run the committed gitleaks history scan, push the two additive commits, verify remote/local SHA equality, and open the draft T002 PR to `main`.
+
+**Remote checkpoint evidence:** The additive implementation/correction tip `d2d1a2305497a366f7072fa95fe6f90ab0978ae0` pushed successfully to `origin/feat/NEF-T002-reproducible-scaffold`; read-only remote verification returned the identical SHA. Draft PR `https://github.com/maca-ai/nest-evaluation-framework/pull/1` is OPEN/DRAFT with base `main`, head `feat/NEF-T002-reproducible-scaffold`, and exact head OID `d2d1a2305497a366f7072fa95fe6f90ab0978ae0`. GitHub CI `verify` passed in 20 seconds at `https://github.com/maca-ai/nest-evaluation-framework/actions/runs/29185226619/job/86630001599`.
+
+The spec-blind workflow did not run, matching the recorded bootstrap limitation: GitHub cannot load the new `workflow_run` definition from a PR head before it exists on trusted `main`. No provider secret was configured or exposed, and no secret-bearing PR-head workaround was attempted. GitHub reports no reviews and no review decision. The PR remains draft and unmerged; milestone/task approval is still pending.
+
+**Exact next action after this record commit:** Push this append-only checkpoint record, verify final local/remote SHA equality, require CI green again at the final PR tip, then wait for Matthias's review/merge disposition. Do not merge, mark T002 Done, or begin T003.
+
+## 2026-07-12 - NEF-T002 cross-vendor GO-WITH-FIXES plan
+
+**Authority and task:** Matthias supplied the independent Claude review disposition `GO-WITH-FIXES` and authorized exactly two minimal fixes on the existing `feat/NEF-T002-reproducible-scaffold` branch. Draft PR #1 remains the checkpoint; no branch, rebase, schema change, or unrelated edit is authorized. The lightweight-tag peel fixture and prior-snapshot deletion residual were independently verified satisfied and remain unchanged.
+
+**Exact files:** Modify `tests/test_target_pinning_schemas.py`, `specs/002-target-integrity/spec.md`, `docs/trust-model.md`, and this append-only `SESSION_LOG.md` only. No `*.schema.json`, dependency, lockfile, workflow, public-interface, task-state, NEST, or other file may change.
+
+**Behavior and documentation:** Add four negative validation cases proving that `provisional_acknowledged: false` and an absent acknowledgement are rejected independently by TargetDescriptor 2.0.0 and TargetSnapshotManifest 2.0.0. Add the Draft 2020-12 cross-field limitation to NEF-002 edge cases and the trust-model honesty boundaries: schema validation alone cannot prove `selector.pinned_sha == resolved_sha` or `resolved_sha == peel(tag_ref_sha)`; enforcement remains explicitly owned by the NEF-T003 contract layer and NEF-T005 pin-target runtime.
+
+**Public interfaces and scope:** No schema or interface changes. The existing `const: true` plus required-field contract remains authoritative. Cross-field validation is deliberately not implemented in T002. This review fix adds regression evidence and normative honesty only; it makes no new NEST target-specific decision, so the current m0 snapshot/capability manifest remains applicable without repinning.
+
+**TDD and sabotage plan:** Add the descriptor false/absent rejection vector first and run the focused test. Add the snapshot false/absent vector and rerun. Prove sensitivity without editing a committed schema: load schemas in memory, recursively replace only the provisional acknowledgement `const: true` with `type: boolean`, validate the same four cases, and require the false cases to become accepted while the absent cases remain rejected by `required`. This demonstrates that the new suite detects weakening `const: true`; the ordinary focused suite must remain green against the untouched normative schemas.
+
+**Verification:** Run `uv sync --locked --all-groups`, `uv run --locked ruff format --check .`, `uv run --locked ruff check .`, `uv run --locked mypy --strict src tests scripts`, and `uv run --locked pytest`; additionally run the focused target-pinning tests, the in-memory sabotage proof, `git diff --check`, schema-file no-diff checks, exact changed-file review, CLAUDE invariant check, and committed-history secret scan. Review staged and complete PR diffs before checkpointing.
+
+**Risks and hard-stop audit:** Primary risks are vacuous negative tests, accidentally leaving a weakened schema, overstating Draft 2020-12 coherence, or touching review-clean artifacts. Mitigations are real `ValidationError` assertions at both layers, in-memory-only sabotage, explicit no-schema-diff verification, and exact file allowlisting. No frozen contract, protocol behavior, dependency, service, baseline, threshold, advisory policy, provider, secret, customer data, production key, NEST content, or external setting changes. The approved review fixes remain inside NEF-T002 and introduce no scope expansion.
+
+### NEF-T002 GO-WITH-FIXES verification and checkpoint record
+
+**Files changed:** `tests/test_target_pinning_schemas.py`, `specs/002-target-integrity/spec.md`, `docs/trust-model.md`, and `SESSION_LOG.md` only. All normative `*.schema.json` files, `TASKS.md`, dependencies, lockfile, workflows, source modules, and NEST inputs are unchanged.
+
+**Review fixes completed:** Added four parametrized negative vectors: false and absent provisional acknowledgement at both TargetDescriptor and TargetSnapshotManifest layers. Each validates through the real Draft 2020-12 registry and requires `jsonschema.exceptions.ValidationError`. Added matching normative honesty statements that Draft 2020-12 cannot enforce instance-field equality or Git peeling, and that NEF-T003/NEF-T005 own the enforcement seam. No cross-field behavior or schema was implemented.
+
+**Sabotage proof:** The on-disk schemas remained untouched. An in-memory copy replaced only `provisional_acknowledged: {const: true}` with `{type: boolean}`, then invoked the exact new test function at both contract layers. Both false-acknowledgement cases changed from pass to `DID NOT RAISE` test failures, proving the suite detects weakening `const: true`; both absent-field cases continued passing because the unchanged `required` rule still produced ValidationError. Result: `SABOTAGE PASS` with two expected new-test failures and two expected absent-case passes.
+
+**Verification results:**
+
+- `uv sync --locked --all-groups` - PASS; 67 packages resolved and 65 checked with no lock drift.
+- `uv run --locked ruff format --check .` - PASS; 12 files already formatted.
+- `uv run --locked ruff check .` - PASS.
+- `uv run --locked mypy --strict src tests scripts` - PASS; zero issues in 12 source files.
+- `uv run --locked pytest` - PASS; 38 tests, up from 34. `tests/test_target_pinning_schemas.py` now has 21 passing cases, up from 17.
+- Focused target-pinning suite - PASS, 21 tests.
+- In-memory `const: true` to `type: boolean` sabotage - PASS with both false vectors detected at descriptor and snapshot layers.
+- `git diff --check` - PASS.
+- `git diff -- specs/001-framework-contracts/contracts` - PASS with empty output; no schema change.
+- Exact changed-file allowlist - PASS; only the four authorized files above differ from HEAD.
+
+**Protocol evidence:** NEST m0 target SHA remains `cb1d0ba91ac09b724b3648ca5fd8e2f502a77f12`; NEST protocol digest remains `e875521b803d5418c52343a536d2dcee98e506c87342db1979ffc266d7fde714`; the existing capability manifest remains current. The NEF protocol digest over the established 14-file input set is now `b93fc8dd4b95ff41a7faf7d81f795e6095a33e05520bd5ecc926d33d7b453cb6`, reflecting only the normative spec-002 (`ffd9d5cc894137e29f8a6399ca3d2eea30027fbb29db00cf860fb666ed1c1867`) and trust-model (`5b87a70da0847ed089fca6661e17bbb8f0286ac959eb971f218abb87b8613d19`) honesty additions; schema input digests are unchanged.
+
+**Known limitations and next action:** Cross-field equality and peeling remain unenforced by schema exactly as documented and remain T003/T005 work. Commit the four-file review fix additively on the existing branch, scan the committed history, push to the existing remote branch, verify exact SHA equality, keep PR #1 draft, and require its updated CI to pass. Do not merge or begin T003.
+
+**Remote review-fix checkpoint:** Commit `f2c1bb36c382d1fb0400a892073910479b1f4d21` pushed additively to `origin/feat/NEF-T002-reproducible-scaffold`; read-only `git ls-remote` returned the identical SHA. Draft PR #1 remains OPEN/DRAFT with exact head OID `f2c1bb36c382d1fb0400a892073910479b1f4d21`. GitHub CI `verify` passed in 21 seconds at `https://github.com/maca-ai/nest-evaluation-framework/actions/runs/29192596500/job/86649773985`. No review decision or merge occurred.
+
+**Checkpoint boundary:** Push this append-only evidence record, verify the final remote tip and its CI, then return PR #1 to Matthias for disposition of the two completed cross-vendor review fixes. Keep the PR draft; do not merge or begin T003.

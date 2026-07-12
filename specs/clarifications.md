@@ -7,7 +7,7 @@
 
 | ID | Question | Resolution | Authority |
 |---|---|---|---|
-| CL-001 | Does a moving target ref identify a run? | No. It is resolution input only; the exact SHA identifies the target. | PRD, PLANNING, Matthias 2026-07-11 |
+| CL-001 | Does a moving target ref identify a run? | No. It may inform a human provisional pinning decision, but the recorded selector is only a gate tag or acknowledged exact SHA. Superseded and narrowed by CL-015. | PRD, PLANNING, Matthias 2026-07-11/12 |
 | CL-002 | Does an unavailable capability block the whole run? | No. It is a reasoned visible skip when not required for that target; it is never a pass. | Constitution III/V, TASKS |
 | CL-003 | Which state wins during aggregation? | Required error, then product fail, then required incomplete/non-pass to inconclusive, then pass only for complete required passes. | PLANNING, constitution III |
 | CL-004 | Is model output a finding confirmation? | No. Model output creates `supported` or `suspected` candidates for human disposition. | AGENTS, PRD, constitution VIII |
@@ -21,6 +21,12 @@
 | CL-012 | Are JSON Schemas hand-authored implementation output? | No. They are normative T001 contracts; T003 generated schemas must conform semantically. | Approved NEF-T001 plan |
 | CL-013 | Does current hash chaining defeat a privileged full rewrite? | Not without a trustworthy published anchor; this remains an explicit honesty boundary. | Selected target design record |
 | CL-014 | May NEF create or use production signing keys? | No. Only public keys and synthetic fixture keys are permitted. | AGENTS, PRD, constitution X |
+| CL-015 | May a mutable ref be the recorded target if its current SHA is also stored? | No. Campaign selectors are only an `mN` gate tag or an explicitly acknowledged exact provisional SHA. | Matthias 2026-07-12; constitution 1.1.0 |
+| CL-016 | Which target counts as gate evidence by default? | The highest numeric `mN` tag; record tag-ref and peeled commit, and never silently fall back. | Matthias 2026-07-12; NEF-002 |
+| CL-017 | Is a pinned provisional SHA reproducible? | Its bytes are replayable, but it is deliberately labelled non-reproducible-baseline and cannot support gate scoring. | Matthias 2026-07-12 |
+| CL-018 | How are annotated and lightweight tags peeled? | Annotated tags dereference the tag object; peeling a lightweight tag is identity. | Matthias 2026-07-12 |
+| CL-019 | What happens if a gate tag moves? | Retain a moved violation snapshot, refuse campaign input as invalid, and emit a deterministic candidate Finding linked to old/new evidence. | Matthias 2026-07-12 |
+| CL-020 | Can prior-history deletion evade moved-tag detection? | Yes. Append-only/hash-chained snapshot history is the later NEF-T004/T005 hardening seam; T002 records the limitation only. | Matthias 2026-07-12 |
 
 ## Open but non-blocking evidence gaps
 
