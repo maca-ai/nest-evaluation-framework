@@ -27,7 +27,7 @@ _FORBIDDEN_KEYS = re.compile(
     r"(?:^|_)(?:api_key|github_token|password|private_key|secret_key|signing_seed|token)$",
     re.IGNORECASE,
 )
-_SECRET_TEXT = re.compile(r"-{5}BEGIN [A-Z0-9 ]*PRIVATE KEY-{5}|gh[pousr]_[A-Za-z0-9]{20,}")
+_SECRET_TEXT = re.compile(r"-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{20,}")
 
 
 class EvidenceError(ValueError):
